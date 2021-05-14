@@ -7,7 +7,8 @@ class FlowerBedAbstract(ABC):
 
     @abstractmethod
     def feedback_insert(value):
-        #inserting data which comes from the feedback topic (soil too dry, too wet)
+        # inserting data which comes from the feedback topic (soil too dry, too wet)
+        # to continuously fix the estimated threshold
         pass
 
     @abstractmethod
