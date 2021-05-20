@@ -12,7 +12,7 @@ class FlowerBedAbstract(ABC):
         pass
 
     @abstractmethod
-    def data_insert(value):
+    def data_insert(self, value):
         #inserting measurements (weather, soil moisture ... single FV or separate?)
         pass
         
@@ -22,6 +22,20 @@ class FlowerBedAbstract(ABC):
         self.configuration_location = configuration_location
         pass
 
+class Flowerbed1(FlowerBedAbstract):
+    def __init__(self) -> None: 
+        pass
 
+    def configure(self, conf: dict):
+        self.threshold = conf["starting_threshold"]
+        self.current_dampness = 0.0
+        pass
 
+    def data_insert(self, value: float):
+        # the value here is the dampness from the sensor
+        self.current_dampness = value
+
+        # TODO
+        # timing is important. We need to figure out when to make the predictions, 
+        # probably at a set time before the watering is scheduled
 
