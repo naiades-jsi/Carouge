@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List
 from kafka import KafkaConsumer
+from waterbeds import Flowerbed1
+import json
+from json import loads
 
 class ConsumerAbstract(ABC):
 
@@ -18,15 +21,41 @@ class ConsumerAbstract(ABC):
 
 class ConsumerKafka(ConsumerAbstract):
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, conf: Dict[Any, Any] = None,
+                 configuration_location: str = None) -> None:
+        super().__init__(configuration_location=configuration_location)
+        if(conf is not None):
+            self.configure(con=conf)
+        elif(configuration_location is not None):
+            # Read config file
+            with open("configuration/" + configuration_location) as data_file:
+                conf = json.load(data_file)
+            self.configure(con=conf)
+        else:
+            print("No configuration was given")
 
-    def configure(self, con: Dict[Any, Any] = None) -> None:
+    def configure(self, con: Dict[Any, Any] = None,  configuration_location: str = None) -> None:
+        self.configuration_location = configuration_location
         if(con is None):
             print("No configuration was given")
             return 
 
-        self.topics = con['topics']
+        self.flowerbed_names = con["flowerbeds"]
+        #array of flowerbed instances
+        self.flowerbeds = []
+
+        #kafka topics for incoming data and outgoing watering ammounts
+        self.topics_data = []
+        self.topics_WA = []
+
+        for i in self.flowerbed_names:
+            configuration = con[i]
+            self.topics_data.append(configuration["topic"] + "_data")
+            self.topics_WA.append(configuration["topic"] + "_WA")
+            new_instance = Flowerbed1()
+            new_instance.configure(configuration)
+            self.flowerbeds.append(new_instance)
+
         
         self.consumer = KafkaConsumer(
                         bootstrap_servers=con['bootstrap_servers'],
@@ -34,36 +63,23 @@ class ConsumerKafka(ConsumerAbstract):
                         enable_auto_commit=con['enable_auto_commit'],
                         group_id=con['group_id'],
                         value_deserializer=eval(con['value_deserializer']))
-        self.consumer.subscribe(self.topics)
-
-        #TODO
-        #   where the data comes from
-        #   create algo instance (probably per flowerbed?)
-        #   configure each class
-
-        self.flowerbed = []
-
-        #TODO
-        #   flowerbed_idx = 0
-        #   for flowerbed in self.flowerbed_list:
-        #       self.flowebed.append( ..flowerbed_instance(conf).. , flowerbed_idx = flowerbed_idx)
-        #       flowerbed_idx +=1
-
+        self.consumer.subscribe(self.topics_data)
         
 
     def read(self) -> None:
         for message in self.consumer:
-
-            flowerbed_idx = self.topics.index(topic)
+            
+            #incoming data is only from the "flowerbedx_data" topics -> including dampness and feedback loop information
 
             # Get topic and insert into correct flowerbed instance and correct case (feedback or sensor data)
             topic = message.topic
             value = message.value
+            flowerbed_idx = self.topics_data.index(topic)
             
-            if(topic in self.feedback_topics):
-                self.flowerbed[flowerbed_idx].feedback_insert(value)
+            if(value["case"] == "feedback"):
+                self.flowerbeds[flowerbed_idx].feedback_insert(value)
                 pass
-            elif(topic in self.flowerbed_data_topics):
-                self.flowerbed[flowerbed_idx].data_insert(value)
+            elif(value["case"] == "dampness"):
+                self.flowerbeds[flowerbed_idx].data_insert(value["value"])
                 pass
                 

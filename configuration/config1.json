@@ -1,0 +1,19 @@
+{
+    "bootstrap_servers": ["localhost:9092"],
+    "auto_offset_reset": "latest",
+    "enable_auto_commit": "True",
+    "group_id": "my-group",
+    "value_deserializer": "lambda x: loads(x.decode('utf-8'))",
+    "flowerbeds": ["flowerbed1"],
+    "flowerbed1": {
+        "name" : "flowerbed1",
+        "topic": "flowerbed1",
+        "initial_threshold": [0.5],
+        "watering_interval": [0, 0, 50],
+        "watering_info": 10,
+        "forecast_model": "DenseNN()",
+        "forecast_model_conf": {},
+        "output": ["KafkaOutput()"],
+        "output_conf": [{}]
+    }
+}
