@@ -9,10 +9,11 @@
         "name" : "flowerbed1",
         "topic": "flowerbed1",
         "initial_threshold": [0.5],
-        "watering_interval": [0, 0, 50],
-        "watering_info": 10,
         "forecast_model": "DenseNN()",
-        "forecast_model_conf": {},
+        "forecast_model_conf": {
+            "loss_coefs": [1, 1],
+            "rise_time":5
+        },
         "output": ["KafkaOutput()"],
         "output_conf": [{}]
     }

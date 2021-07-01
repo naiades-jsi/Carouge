@@ -4,7 +4,7 @@ import datetime
 from datetime import datetime
 import time
 from scheduling import SimpleSchedule
-from forecasting import DenseNN
+from forecasting import DenseNN, Loss_period
 from output import KafkaOutput
 import numpy as np
 import pandas as pd
@@ -44,15 +44,20 @@ class Flowerbed1(FlowerBedAbstract):
         self.threshold = conf["initial_threshold"]
 
         #how early before the scheduled watering time the W.A. is calculated (seconds)
-        self.watering_info = conf["watering_info"]
+        #self.watering_info = conf["watering_info"]
+
+        #self.drying_model = eval(conf["drying_model"])
+        #self.drying_model.configure(con = conf["drying_model_conf"])
 
         self.forecast_model = eval(conf["forecast_model"])
         self.forecast_model.configure(con = conf["forecast_model_conf"])
 
-        self.watering_interval = conf["watering_interval"][0]*24*3600 + conf["watering_interval"][1]*3600 + conf["watering_interval"][2]
+        #self.watering_interval = conf["watering_interval"][0]*24*3600 + conf["watering_interval"][1]*3600 + conf["watering_interval"][2]
+
+        #self.loss_coefs = conf["loss_coefs"]
 
         self.current_dampness = 0.0
-        self.next_watering = time.time() + self.watering_interval
+        #self.next_watering = time.time() + self.watering_interval
 
         self.topic_data = conf["name"] + "_data"
         self.topic_WA = conf["name"] + "_WA"
@@ -60,39 +65,43 @@ class Flowerbed1(FlowerBedAbstract):
 
     def data_insert(self, value: float):
         # the value here is the dampness from the sensor
-        self.current_dampness = value
+        # once per day at 6AM
+        # the output is time and ammount of watering
 
-        self.time = time.time()
+
+        #self.time = time.time()
 
         self.current_dampness = value
 
         print("Data inserted: " + str(value))
-        print("Timedelta: " + str(np.abs(self.next_watering - self.time)))
 
-        #TODO forecasting on  dampness threshold not time
+        #1. step - how long untill the current dampness falls under the threshold
+        timetowatering = self.forecast_model.predict_time(current_dampness = self.current_dampness, weather_data = None, estimated_th = self.threshold)
 
-        if(np.abs(self.next_watering - self.time) < self.watering_info):
-            #weather data will also be added here
-            WA = self.forecast_model.predict(self.current_dampness, self.watering_interval, estimated_th = self.threshold, Period = self.watering_interval)
+        #2. step - when we do water the plants: how much water to use
+        WA = self.forecast_model.predict(current_dampness = self.threshold, 
+                                        weather_data = None,
+                                        estimated_th = self.threshold)
 
-            #send watering ammount to output
-            for output in self.outputs:
-                tosend = {
-                    "WA": WA
-                }
-                output.send_out(value=tosend,
-                                name = self.topic_WA, 
-                                timestamp=self.time)
+        # T-time to next watering
+        # WA - watering ammount
+        tosend = {
+            "T": timetowatering,
+            "WA": WA
+        }
+        
+        for output in self.outputs:
+            output.send_out(value=tosend,
+                            name = self.topic_WA, 
+                            timestamp=self.time)
+        
+        return(tosend)
+      
 
-            #move to next watering date
-            self.next_watering = SimpleSchedule(self.next_watering, self.watering_interval)
-            pass
+
 
 
     def feedback_insert(self, value: float):
-
-        
-
         #correcting the internal threshold once we get the feedback (too wet, too dry)
         self.threshold = threshold_correction(self.threshold, value)
 
