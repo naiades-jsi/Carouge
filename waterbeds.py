@@ -64,7 +64,7 @@ class Flowerbed1(FlowerBedAbstract):
         self.topic_WA = conf["name"] + "_WA"
         pass
 
-    def data_insert(self, value: float):
+    def data_insert(self, value: float, timestamp):
         # the value here is the dampness from the sensor
         # once per day at 6AM
         # the output is time and ammount of watering
@@ -87,6 +87,7 @@ class Flowerbed1(FlowerBedAbstract):
         # T-time to next watering
         # WA - watering ammount
         tosend = {
+            "timestamp": timestamp,  #UNIX, s
             "T": timetowatering,
             "WA": WA
         }
@@ -103,7 +104,7 @@ class Flowerbed1(FlowerBedAbstract):
 
 
 
-    def feedback_insert(self, value: float):
+    def feedback_insert(self, value: float, timestamp):
         #correcting the internal threshold once we get the feedback (too wet, too dry)
         self.threshold = threshold_correction(self.threshold, value)
 
