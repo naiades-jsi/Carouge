@@ -9,6 +9,7 @@ from output import KafkaOutput
 import numpy as np
 import pandas as pd
 import json
+import os
 
 class FlowerBedAbstract(ABC):
 
@@ -98,21 +99,22 @@ class Flowerbed1(FlowerBedAbstract):
                             name = self.topic_WA)
         
         return(tosend)
-      
-
-
-
 
     def feedback_insert(self, value: float):
         #correcting the internal threshold once we get the feedback (too wet, too dry)
         self.threshold = threshold_correction(self.threshold, value)
 
     def save_prediction(self, tosave):
-        filename = "predictions/" + self.name + "prediction.json"
+        # Make predictions file is it does not exists
+        dir = "./predictions"
+        if not os.path.isdir(dir):
+            os.makedirs(dir)
+
+
+        filename = dir + "/" + self.name + "prediction.json"
         file = open(filename, "w")
         json.dump(tosave, file)
         file.close()
-
 
 def threshold_correction(current_threshold, feedback):
     #if feedback = 1 -> threshold too high
