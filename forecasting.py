@@ -6,7 +6,8 @@ import pandas as pd
 import tensorflow as tf
 from tensorflow import keras
 from typing import Any, Dict, List
-from abc import abstractmethod, ABC        
+from abc import abstractmethod, ABC   
+import json  
 
 class ForecastAbstract(ABC):
 
@@ -23,17 +24,23 @@ class ForecastAbstract(ABC):
         pass
 
     @abstractmethod
-    def predict(self, input_values: list) -> None:
+    def predict_time(self, input_values: list) -> None:
        pass 
+
+    @abstractmethod
+    def predict_WA(self, input_values: list) -> None:
+        pass
 
 class DenseNN(ForecastAbstract):
     def __init__(self, configuration_location: str = None) -> None:
         self.configuration_location = configuration_location
  
     def configure(self, con: Dict[Any, Any], configuration_location: str = None) -> None:
-        self.train()
+        
         self.loss_coefs = con["loss_coefs"]
         self.rise_time = con["rise_time"]
+        print(self.rise_time)
+        self.train()
         pass
 
     def train(self) -> None:

@@ -4,10 +4,11 @@ import datetime
 from datetime import datetime
 import time
 from scheduling import SimpleSchedule
-from forecasting import DenseNN, Loss_period
+from forecasting import DenseNN
 from output import KafkaOutput
 import numpy as np
 import pandas as pd
+import json
 
 class FlowerBedAbstract(ABC):
 
@@ -79,7 +80,7 @@ class Flowerbed1(FlowerBedAbstract):
         timetowatering = self.forecast_model.predict_time(current_dampness = self.current_dampness, weather_data = None, estimated_th = self.threshold)
 
         #2. step - when we do water the plants: how much water to use
-        WA = self.forecast_model.predict(current_dampness = self.threshold, 
+        WA = self.forecast_model.predict_WA(current_dampness = self.current_dampness, 
                                         weather_data = None,
                                         estimated_th = self.threshold)
 
@@ -89,11 +90,12 @@ class Flowerbed1(FlowerBedAbstract):
             "T": timetowatering,
             "WA": WA
         }
+
+        self.save_prediction(tosend)
         
         for output in self.outputs:
             output.send_out(value=tosend,
-                            name = self.topic_WA, 
-                            timestamp=self.time)
+                            name = self.topic_WA)
         
         return(tosend)
       
@@ -104,6 +106,13 @@ class Flowerbed1(FlowerBedAbstract):
     def feedback_insert(self, value: float):
         #correcting the internal threshold once we get the feedback (too wet, too dry)
         self.threshold = threshold_correction(self.threshold, value)
+
+    def save_prediction(self, tosave):
+        filename = "predictions/" + self.name + "prediction.json"
+        file = open(filename, "w")
+        json.dump(tosave, file)
+        file.close()
+
 
 def threshold_correction(current_threshold, feedback):
     #if feedback = 1 -> threshold too high

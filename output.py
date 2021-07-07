@@ -56,5 +56,3 @@ class TerminalOutput(OutputAbstract):
         o = str(timestamp) + ": (value: " + str(value) + ")"
         print(o)
 
-class ToFile():
-    #TODO

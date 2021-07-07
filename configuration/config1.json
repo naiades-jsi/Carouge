@@ -8,7 +8,7 @@
     "flowerbed1": {
         "name" : "flowerbed1",
         "topic": "flowerbed1",
-        "initial_threshold": [0.5],
+        "initial_threshold": [0.01],
         "forecast_model": "DenseNN()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],

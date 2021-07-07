@@ -58,8 +58,8 @@ def simulate(WA, current, period):
 
 running_dampness = []
 
-current = 1.0
-WA = 1
+current = 0
+WA = 100
 kafka_topic = "flowerbed1_data"
 current = simulate(WA, current, 50)
 
