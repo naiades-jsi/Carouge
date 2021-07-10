@@ -1,4 +1,6 @@
 {
     "hour_of_time_predictions": "06:00",
-    "predictions_files": ["flowerbed1_prediction.json"]
+    "predictions_files": ["flowerbed1_prediction.json"],
+    "output_topics": ["flowerbed1_output"],
+    "bootstrap_server": ["localhost:9092"]
 }

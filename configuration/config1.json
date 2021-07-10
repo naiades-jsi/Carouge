@@ -8,11 +8,11 @@
     "flowerbed1": {
         "name" : "flowerbed1",
         "topic": "flowerbed1",
-        "initial_threshold": [0.01],
+        "initial_threshold": [10],
         "forecast_model": "DenseNN()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
-            "rise_time":5
+            "rise_time":2
         },
         "output": ["KafkaOutput()"],
         "output_conf": [{}]
