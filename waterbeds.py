@@ -112,7 +112,7 @@ class Flowerbed1(FlowerBedAbstract):
             os.makedirs(dir)
 
 
-        filename = dir + "/" + self.name + "prediction.json"
+        filename = dir + "/" + self.name + "_prediction.json"
         file = open(filename, "w")
         json.dump(tosave, file)
         file.close()

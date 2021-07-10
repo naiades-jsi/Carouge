@@ -1,3 +1,4 @@
 {
-    "hour_of_time_predictions": "06:00"
+    "hour_of_time_predictions": "06:00",
+    "predictions_files": ["flowerbed1_prediction.json"]
 }
