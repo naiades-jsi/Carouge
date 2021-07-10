@@ -12,7 +12,6 @@ from consumer import ConsumerKafka
 
 from output import KafkaOutput
 from waterbeds import Flowerbed1
-from scheduling import SimpleSchedule
 from consumer import ConsumerKafka
 from forecasting import DenseNN
 

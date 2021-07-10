@@ -78,7 +78,7 @@ class DenseNN(ForecastAbstract):
         s = top
         S = np.linspace(current_val, top, self.rise_time)
         for i in range(300):
-            s -= 0.02*s + (np.random.rand()-0.5)
+            s -= 0.03*s + (np.random.rand()-0.5)
             S = np.concatenate([S, [s]])
         
         return (S)  

@@ -3,7 +3,6 @@ from typing import Any, Dict, List
 import datetime
 from datetime import datetime
 import time
-from scheduling import SimpleSchedule
 from forecasting import DenseNN
 from output import KafkaOutput
 import numpy as np
@@ -75,13 +74,13 @@ class Flowerbed1(FlowerBedAbstract):
 
         self.current_dampness = value
 
-        print("Data inserted: " + str(value))
+        #print("Data inserted: " + str(value))
 
         #1. step - how long untill the current dampness falls under the threshold
         timetowatering = self.forecast_model.predict_time(current_dampness = self.current_dampness, weather_data = None, estimated_th = self.threshold)
 
         #2. step - when we do water the plants: how much water to use
-        WA = self.forecast_model.predict_WA(current_dampness = self.current_dampness, 
+        WA = self.forecast_model.predict_WA(current_dampness = self.threshold[0], 
                                         weather_data = None,
                                         estimated_th = self.threshold)
 
