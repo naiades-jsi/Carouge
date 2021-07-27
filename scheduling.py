@@ -87,34 +87,3 @@ class Scheduling:
             # run_pending obtain calls
             schedule.run_pending()
             time.sleep(1)
-
-
-def main():
-    parser = argparse.ArgumentParser(description="consumer")
-
-    parser.add_argument(
-        "-c",
-        "--config",
-        dest="config",
-        default="config1.json",
-        help=u"Config file located in ./config/ directory."
-    )
-
-    # Display help if no arguments are defined
-    if (len(sys.argv) == 1):
-        parser.print_help()
-        sys.exit(1)
-
-    # Parse input arguments
-    args = parser.parse_args()
-
-    #this will be changed to a component which communicates with the API
-    consumer = Scheduling(configuration_location=args.config)
-
-    consumer.run()
-
-
-
-if (__name__ == '__main__'):
-    main()
-
