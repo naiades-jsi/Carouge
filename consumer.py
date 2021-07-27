@@ -76,10 +76,11 @@ class ConsumerKafka(ConsumerAbstract):
             value = message.value
             flowerbed_idx = self.topics_data.index(topic)
             
-            if(value["case"] == "feedback"):
-                self.flowerbeds[flowerbed_idx].feedback_insert(value["value"], value["timestamp"])
-                pass
-            elif(value["case"] == "dampness"):
-                self.flowerbeds[flowerbed_idx].data_insert(value["value"], value["timestamp"])
-                pass
+            self.flowerbeds[flowerbed_idx].data_insert(value["value"], value["timestamp"])
+
+
+            #if(value["feedback"] == "Nan"):
+            #    self.flowerbeds[flowerbed_idx].data_insert(value["value"], value["timestamp"])
+            #else:
+            #    self.flowerbeds[flowerbed_idx].feedback_insert(value["value"], value["timestamp"])
                 
