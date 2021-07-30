@@ -72,7 +72,7 @@ class Flowerbed1(FlowerBedAbstract):
 
         #self.time = time.time()
 
-        self.current_dampness = value
+        self.current_dampness = value[0]
 
         #print("Data inserted: " + str(value))
 

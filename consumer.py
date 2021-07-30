@@ -28,7 +28,7 @@ class ConsumerKafka(ConsumerAbstract):
             self.configure(con=conf)
         elif(configuration_location is not None):
             # Read config file
-            with open("configuration/" + configuration_location) as data_file:
+            with open("configuration/main/" + configuration_location) as data_file:
                 conf = json.load(data_file)
             self.configure(con=conf)
         else:
@@ -76,7 +76,7 @@ class ConsumerKafka(ConsumerAbstract):
             value = message.value
             flowerbed_idx = self.topics_data.index(topic)
             
-            self.flowerbeds[flowerbed_idx].data_insert(value["value"], value["timestamp"])
+            self.flowerbeds[flowerbed_idx].data_insert(value["ftr_vector"], value["timestamp"])
 
 
             #if(value["feedback"] == "Nan"):
