@@ -7,6 +7,9 @@ from typing import Any, List
 from kafka import KafkaProducer
 from datetime import datetime
 
+def run_time_predictions(scheduling):
+    scheduling.time_predictions()
+
 class Scheduling:
     hour_of_time_predictions: str
     predictions_files: List[str]
@@ -32,15 +35,17 @@ class Scheduling:
                                       value_serializer=lambda x: json.dumps(x).encode('utf-8'))
 
         #Schedule daily time predictions
-        schedule.every().day.at(self.hour_of_time_predictions).do(self.time_predictions())
+        schedule.every().day.at(self.hour_of_time_predictions).do(self.time_predictions)
 
         #Schedule prediction every minute (for testing)
         #schedule.every(1).minute.do(self.time_predictions)
+        print('Sceduling config complete: ' + str(time.time()), flush=True)
 
 
 
     def time_predictions(self) -> None:
-        #print("Time predictions", flush=True)
+
+        print("Time predictions: " + str(time.time()), flush=True)
         # Reads predicted times and schedules prediction reads for water
         # amount and sends time predictions to kafka.
 
@@ -68,7 +73,7 @@ class Scheduling:
                     #   schedule.every().day.at(datetime.fromtimestamp(time_of_watering-1800).strftime("%H:%M")).do(self.water_amount_predictions(prediction_file_indx))
 
     def water_amount_predictions(self, index: int) -> Any:
-        print("Water amount predictions", flush=True)
+        print("Water amount predictions" + str(time.time()), flush=True)
         # Reads predicted water amount and sends it to kafka
         
         prediction_file = self.predictions_file[index]
@@ -87,3 +92,7 @@ class Scheduling:
             # run_pending obtain calls
             schedule.run_pending()
             time.sleep(1)
+
+
+    def printing(self):
+        print('hello')

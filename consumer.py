@@ -75,6 +75,7 @@ class ConsumerKafka(ConsumerAbstract):
             topic = message.topic
             value = message.value
             flowerbed_idx = self.topics_data.index(topic)
+            print('message: ' + str(value))
             
             self.flowerbeds[flowerbed_idx].data_insert(value["ftr_vector"], value["timestamp"])
 
