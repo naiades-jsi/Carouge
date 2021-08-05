@@ -7,7 +7,7 @@
     "flowerbeds": ["Device_1efd", "Device_1efe", "Device_1eff", "Device_1f0d", "Device_1f02", "Device_1f06", "Device_1f08", "Device_1f09", "Device_1f10" ],
     "Device_1efd": {
         "name" : "Device_1efd",
-        "topic": "measurements_node_carouge_device_1efd",
+        "topic": "features_carouge_device_1efd_anomaly",
         "initial_threshold": [10],
         "forecast_model": "DenseNN()",
         "forecast_model_conf": {
@@ -19,7 +19,7 @@
     },
     "Device_1efe": {
         "name" : "Device_1efe",
-        "topic": "measurements_node_carouge_device_1efe",
+        "topic": "features_carouge_device_1efe",
         "initial_threshold": [10],
         "forecast_model": "DenseNN()",
         "forecast_model_conf": {
@@ -31,7 +31,7 @@
     },
     "Device_1eff": {
         "name" : "Device_1eff",
-        "topic": "measurements_node_carouge_device_1eff",
+        "topic": "features_carouge_device_1eff",
         "initial_threshold": [10],
         "forecast_model": "DenseNN()",
         "forecast_model_conf": {
@@ -43,7 +43,7 @@
     },
     "Device_1f0d": {
         "name" : "Device_1f0d",
-        "topic": "measurements_node_carouge_device_1f0d",
+        "topic": "features_carouge_device_1f0d",
         "initial_threshold": [10],
         "forecast_model": "DenseNN()",
         "forecast_model_conf": {
@@ -55,7 +55,7 @@
     },
     "Device_1f02": {
         "name" : "Device_1f02",
-        "topic": "measurements_node_carouge_device_1f02",
+        "topic": "features_carouge_device_1f02",
         "initial_threshold": [10],
         "forecast_model": "DenseNN()",
         "forecast_model_conf": {
@@ -67,7 +67,7 @@
     },
     "Device_1f06": {
         "name" : "Device_1f06",
-        "topic": "measurements_node_carouge_device_1f06",
+        "topic": "features_carouge_device_1f06",
         "initial_threshold": [10],
         "forecast_model": "DenseNN()",
         "forecast_model_conf": {
@@ -79,7 +79,7 @@
     },
     "Device_1f08": {
         "name" : "Device_1f08",
-        "topic": "measurements_node_carouge_device_1f08",
+        "topic": "features_carouge_device_1f08",
         "initial_threshold": [10],
         "forecast_model": "DenseNN()",
         "forecast_model_conf": {
@@ -91,7 +91,7 @@
     },
     "Device_1f09": {
         "name" : "Device_1f09",
-        "topic": "measurements_node_carouge_device_1f09",
+        "topic": "features_carouge_device_1f09",
         "initial_threshold": [10],
         "forecast_model": "DenseNN()",
         "forecast_model_conf": {
@@ -103,7 +103,7 @@
     },
     "Device_1f10": {
         "name" : "Device_1f10",
-        "topic": "measurements_node_carouge_device_1f10",
+        "topic": "features_carouge_device_1f10",
         "initial_threshold": [10],
         "forecast_model": "DenseNN()",
         "forecast_model_conf": {

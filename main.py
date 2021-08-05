@@ -88,9 +88,9 @@ def main():
 
     # Define paralell proceses
     consumer_process = Process(target=start_consumer,
-                               args=(args.config_consumer))
+                               args=(str(args.config_consumer),))
     schedule_process = Process(target=start_scheduler,
-                               args=(args.config_schedule))
+                               args=(str(args.config_schedule),))
     
     # Start paralell processes
     consumer_process.start()
