@@ -51,7 +51,6 @@ class ConsumerKafka(ConsumerAbstract):
 
         for i in self.flowerbed_names:
             configuration = con[i]
-            self.topics_data.append(configuration["topic"] + "_data")
             self.topics_WA.append(configuration["topic"] + "_WA")
             new_instance = Flowerbed1()
             new_instance.configure(configuration)
