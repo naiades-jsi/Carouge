@@ -65,6 +65,9 @@ class ConsumerKafka(ConsumerAbstract):
                         group_id=con['group_id'],
                         value_deserializer=eval(con['value_deserializer']))
         self.consumer.subscribe(self.topics_data)
+
+        for topic in self.topics_data:
+            print("Listening on: " + topic, flush=True)
         
 
     def read(self) -> None:
