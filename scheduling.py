@@ -60,8 +60,11 @@ class Scheduling:
                 WA = last_prediction["WA"]
                 if(hours_until_watering < 24):
                     sample_time = last_prediction["timestamp"]
-                    #print("minutes to watering: " + str(hours_until_watering))
-                    time_of_watering = sample_time + hours_until_watering * 3600
+
+                    # Sample time is in miliseconds (needs to be in seconds).
+                    # To this time seconds untill watering are added.
+                    time_of_watering = sample_time/1000 + hours_until_watering * 3600
+
                     # Send to kafka
                     kafka_topic = self.output_topics[prediction_file_indx]
                     output_dict = {"timestamp": time.time(),
