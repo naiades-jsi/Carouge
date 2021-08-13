@@ -58,6 +58,7 @@ class Scheduling:
                 # If the watering happens today
                 hours_until_watering = last_prediction["T"]
                 WA = last_prediction["WA"]
+                sample_time = last_prediction["timestamp"]
 
                 # If time of watering is less than 24h from now
                 current_time = time.time()/1000
@@ -66,11 +67,9 @@ class Scheduling:
                 time_of_watering = sample_time/1000 + hours_until_watering * 3600
 
                 # Hours untill watering from now
-                until_watering_from_now = time_of_watering - current_time
+                until_watering_from_now = (time_of_watering - current_time)/3600
 
                 if(until_watering_from_now < 24):
-                    sample_time = last_prediction["timestamp"]
-
                     # Send to kafka (timestamp: current time (in seconds),
                     # T: time of watering, WA: water amount)
                     kafka_topic = self.output_topics[prediction_file_indx]
