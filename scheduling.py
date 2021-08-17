@@ -71,12 +71,17 @@ class Scheduling:
 
                 if(until_watering_from_now < 24):
                     # Send to kafka (timestamp: current time (in seconds),
-                    # T: time of watering, WA: water amount)
+                    # T: time of watering, WA: water amount
+
+                    # Find the topic and post
                     kafka_topic = self.output_topics[prediction_file_indx]
                     output_dict = {"timestamp": current_time,
                                     "T": datetime.fromtimestamp(time_of_watering).strftime("%Y-%m-%d %H:%M:%S"),
                                     "WA": WA}
                     self.kafka_producer.send(kafka_topic, value=output_dict)
+
+                    # Logging
+                    print(str(time.time()) + ": flowerbed" + self.predictions_files[prediction_file_indx] + "{Time: " + output_dict["T"] + ", Water amount: " + output_dict["WA"] +"}", flush=True)
 
                     #   Schedule water amount prediction (30 minutes before the actual watering)
                     #   schedule.every().day.at(datetime.fromtimestamp(time_of_watering-1800).strftime("%H:%M")).do(self.water_amount_predictions(prediction_file_indx))
