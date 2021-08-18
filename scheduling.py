@@ -69,6 +69,8 @@ class Scheduling:
                 # Hours untill watering from now
                 until_watering_from_now = (time_of_watering - current_time)/3600
 
+                print("flowerbed" + self.predictions_files[prediction_file_indx] + " => hours till now:" + str(until_watering_from_now) + ", time of watering: " + str(time_of_watering), flush=True)
+
                 if(until_watering_from_now < 24):
                     # Send to kafka (timestamp: current time (in seconds),
                     # T: time of watering, WA: water amount
