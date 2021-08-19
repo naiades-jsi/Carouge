@@ -60,11 +60,12 @@ class Scheduling:
                 WA = last_prediction["WA"]
                 sample_time = last_prediction["timestamp"]
 
-                # If time of watering is less than 24h from now
-                current_time = time.time()/1000
+                # If time of watering is less than 24h from now )time.time returs seconds
+                current_time = time.time()
+
                 # Sample time is in miliseconds (needs to be in seconds).
                 # To this time seconds untill watering are added.
-                time_of_watering = sample_time/1000 + hours_until_watering * 3600
+                time_of_watering = (sample_time/1000) + (hours_until_watering * 3600)
 
                 # Hours untill watering from now
                 until_watering_from_now = (time_of_watering - current_time)/3600
