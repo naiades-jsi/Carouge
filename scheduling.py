@@ -84,7 +84,7 @@ class Scheduling:
                     self.kafka_producer.send(kafka_topic, value=output_dict)
 
                     # Logging
-                    print(str(time.time()) + ": flowerbed" + self.predictions_files[prediction_file_indx] + "{Time: " + output_dict["T"] + ", Water amount: " + output_dict["WA"] +"}", flush=True)
+                    print(str(time.time()) + ": flowerbed" + str(self.predictions_files[prediction_file_indx]) + "{Time: " + str(output_dict["T"]) + ", Water amount: " + str(output_dict["WA"]) +"}", flush=True)
 
                     #   Schedule water amount prediction (30 minutes before the actual watering)
                     #   schedule.every().day.at(datetime.fromtimestamp(time_of_watering-1800).strftime("%H:%M")).do(self.water_amount_predictions(prediction_file_indx))
