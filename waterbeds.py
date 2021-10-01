@@ -3,7 +3,7 @@ from typing import Any, Dict, List
 import datetime
 from datetime import datetime
 import time
-from forecasting import DenseNN
+from forecasting import DenseNN, DenseNN_RealData
 from output import KafkaOutput
 import numpy as np
 import pandas as pd
@@ -60,6 +60,8 @@ class Flowerbed1(FlowerBedAbstract):
         self.current_dampness = 0.0
         #self.next_watering = time.time() + self.watering_interval
 
+
+        #TODO: fix this!!
         self.topic_data = conf["name"] + "_data"
         self.topic_WA = conf["name"] + "_WA"
         pass
@@ -79,10 +81,14 @@ class Flowerbed1(FlowerBedAbstract):
         #1. step - how long untill the current dampness falls under the threshold
         timetowatering = self.forecast_model.predict_time(current_dampness = self.current_dampness, weather_data = None, estimated_th = self.threshold)
 
+        now = datetime.now()
+        hour_of_watering = (now.hour + timetowatering)%24
+
         #2. step - when we do water the plants: how much water to use
         WA = self.forecast_model.predict_WA(current_dampness = self.threshold[0], 
                                         weather_data = None,
-                                        estimated_th = self.threshold)
+                                        estimated_th = self.threshold, 
+                                        hour_of_watering = hour_of_watering)
 
         # T-time to next watering
         # WA - watering ammount
@@ -98,7 +104,7 @@ class Flowerbed1(FlowerBedAbstract):
             output.send_out(value=tosend,
                             name = self.topic_WA)
         
-        return(tosend)
+        
 
     def feedback_insert(self, value: float, timestamp):
         #correcting the internal threshold once we get the feedback (too wet, too dry)

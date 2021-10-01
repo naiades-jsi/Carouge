@@ -46,12 +46,12 @@ class ConsumerKafka(ConsumerAbstract):
 
         #kafka topics for incoming data and outgoing watering ammounts
         self.topics_data = []
-        self.topics_WA = []
+        #self.topics_WA = []
 
         for i in self.flowerbed_names:
             configuration = con[i]
-            self.topics_data.append(configuration["topic"] + "_data")
-            self.topics_WA.append(configuration["topic"] + "_WA")
+            self.topics_data.append(configuration["topic"])
+            #self.topics_WA.append(configuration["topic"] + "_WA")
             new_instance = Flowerbed1()
             new_instance.configure(configuration)
             self.flowerbeds.append(new_instance)
@@ -63,6 +63,8 @@ class ConsumerKafka(ConsumerAbstract):
                         enable_auto_commit=con['enable_auto_commit'],
                         group_id=con['group_id'],
                         value_deserializer=eval(con['value_deserializer']))
+
+        print(self.topics_data)
         self.consumer.subscribe(self.topics_data)
         
 

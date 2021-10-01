@@ -8,6 +8,7 @@ from tensorflow import keras
 from typing import Any, Dict, List
 from abc import abstractmethod, ABC   
 import json  
+from datetime import datetime
 
 class ForecastAbstract(ABC):
 
@@ -85,7 +86,6 @@ class DenseNN(ForecastAbstract):
 
     def predict_time(self, current_dampness: float, weather_data: list, estimated_th: float = 0) -> None:
 
-        #TODO: include weather data
         T = 1
         Ts = []
         
@@ -103,10 +103,7 @@ class DenseNN(ForecastAbstract):
 
         return(t)
 
-    def predict_WA(self, current_dampness: float, weather_data: list, estimated_th: float = 0):
-
-        #TODO: include weather data
-
+    def predict_WA(self, current_dampness: float, weather_data: list, estimated_th: float = 0, hour_of_watering: int = 0):
         #Loss function to minimize
         Loss = lambda WA, time: self.loss_coefs[0]*WA - self.loss_coefs[1]*time
 
@@ -127,3 +124,90 @@ class DenseNN(ForecastAbstract):
         WA = WAs[idx]
         time = Times[idx]
         return(WA)
+
+
+class DenseNN_RealData(ForecastAbstract):
+    def __init__(self, configuration_location: str = None) -> None:
+        self.configuration_location = configuration_location
+ 
+    def configure(self, con: Dict[Any, Any], configuration_location: str = None) -> None:
+        self.loss_coefs = con["loss_coefs"]
+        self.train_data = "training_data/" + con["train_data"]
+        #self.rise_time = con["rise_time"]
+        #print(self.rise_time)
+        self.train()
+        pass
+
+    def train(self) -> None:
+        x_train, y_train = np.load(self.train_data, allow_pickle = True)
+
+        horizon = 72
+
+        self.model = tf.keras.Sequential()
+        self.model.add(tf.keras.layers.Dense(4,activation='relu'))
+        self.model.add(tf.keras.layers.Dense(40))
+        self.model.add(tf.keras.layers.Dropout(0.2))
+        self.model.add(tf.keras.layers.Dense(horizon, activation='relu'))
+        self.model.add(tf.keras.layers.Dropout(0.2))
+        self.model.add(tf.keras.layers.Dense(horizon, activation='relu'))
+
+        self.model.compile(optimizer =tf.keras.optimizers.Adam(lr = 0.001, beta_1 = 0.95), loss = 'mse')
+
+        batch_size = 5
+        self.model.fit(x_train,y_train, epochs =200, batch_size = batch_size, validation_data = None, verbose = 1)
+        pass
+  
+
+    def predict_time(self, current_dampness: float, weather_data: list, estimated_th: float = 0) -> None:
+
+        #TODO: include weather data
+        #T = weather_data[0]
+        T = 22
+
+        Ts = []
+        
+        #get the full curve which descends from 100% to 0%
+        now = datetime.now()
+        current_hour = now.hour
+
+        y_pred = self.model.predict(np.atleast_2d([current_dampness, 0, T, current_hour]))[0]
+
+        #cut off the time of rising
+        #y_pred = y_pred[self.rise_time:]
+        
+        print(y_pred)
+        #observe the part of the curve which is lower than the current dampness
+        y_pred = y_pred[y_pred < current_dampness]
+
+        #finally get the time it takes to reach the threshold (in hours, the cap is 72 intervals -- 24h)
+        t = len(y_pred[y_pred>=estimated_th])/3
+
+        return(t)
+
+    def predict_WA(self, current_dampness: float, weather_data: list, estimated_th: float = 0, hour_of_watering: int = 0):
+
+        #TODO: include weather data
+        #T = weather_data[0]
+        T = 22
+
+        #Loss function to minimize
+        Loss = lambda WA, time: self.loss_coefs[0]*WA - self.loss_coefs[1]*time
+
+        WAs = np.linspace(0, 100, 100)
+        Times = []
+        Losses = []
+        
+
+        #Get the loss for all possible watering ammounts
+        for i in WAs:
+            y_pred = self.model.predict(np.atleast_2d([current_dampness, i, T, 0]))[0]
+            t = len(y_pred[y_pred>=estimated_th])
+            Times.append(t)
+            Losses.append(Loss(i, t))
+
+        #choose the minimal loss        
+        idx = np.argmin(Losses)
+        WA = WAs[idx]
+        time = Times[idx]
+        return(WA)
+

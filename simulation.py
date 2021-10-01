@@ -24,7 +24,7 @@ consumer = KafkaConsumer(bootstrap_servers=["localhost:9092"],
                         group_id="my-group",
                         value_deserializer=lambda x: loads(x.decode('utf-8')))
 
-consumer.subscribe(["flowerbed1_WA"])
+consumer.subscribe(["carouge_test"])
 
 def simulate(WA, current, period):
 
@@ -44,7 +44,7 @@ def simulate(WA, current, period):
             tosend = {
                 "case": "dampness",
                 "timestamp": time.time(),
-                "value": S[i]
+                "ftr_vector": [S[i]]
             }
             running_dampness.append(S[i])
             producer.send(kafka_topic, value=tosend)
@@ -60,7 +60,7 @@ running_dampness = []
 
 current = 0
 WA = 100
-kafka_topic = "flowerbed1_data"
+kafka_topic = "carouge_test"
 current = simulate(WA, current, 50)
 
 for message in consumer:

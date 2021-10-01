@@ -49,6 +49,16 @@ class Scheduling:
         # Reads predicted times and schedules prediction reads for water
         # amount and sends time predictions to kafka.
 
+        #TODO: schedule modifications - group all waterings for the current day at the same time -> WAs possibly have to be fixed (using below code)
+        #TODO: rewrite files after watering?
+        #self.forecast_model = eval(conf["forecast_model"])
+        #self.forecast_model.configure(con = conf["forecast_model_conf"])
+        #forecast_model.predict_WA(current_dampness = self.threshold[0], 
+        #                                weather_data = None,
+        #                                estimated_th = self.threshold, 
+        #                                hour_of_watering = hour_of_watering)
+
+
         # read all flower bed sensor files
         for prediction_file_indx in range(len(self.predictions_files)):
             prediction_files = self.predictions_files[prediction_file_indx]
@@ -68,23 +78,8 @@ class Scheduling:
                                     "T": datetime.fromtimestamp(time_of_watering).strftime("%Y-%m-%d %H:%M:%S"),
                                     "WA": WA}
                     self.kafka_producer.send(kafka_topic, value=output_dict)
-
-                    #   Schedule water amount prediction (30 minutes before the actual watering)
-                    #   schedule.every().day.at(datetime.fromtimestamp(time_of_watering-1800).strftime("%H:%M")).do(self.water_amount_predictions(prediction_file_indx))
-
-    def water_amount_predictions(self, index: int) -> Any:
-        print("Water amount predictions" + str(time.time()), flush=True)
-        # Reads predicted water amount and sends it to kafka
-        
-        prediction_file = self.predictions_file[index]
-        with open(prediction_file) as file:
-            json_file = json.load(file)
-            output_dict = {"W": json_file["W"]}
-            self.kafka_producer.send(self.output_topics[index],
-                                     value=output_dict)
-
-        # So that the job only executes once
         return schedule.CancelJob
+
 
     def run(self) -> None:
         # Loop and run all jobs that need to be ran
@@ -92,7 +87,3 @@ class Scheduling:
             # run_pending obtain calls
             schedule.run_pending()
             time.sleep(1)
-
-
-    def printing(self):
-        print('hello')
