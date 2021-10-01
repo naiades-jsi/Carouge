@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List
+from datetime import datetime
 from kafka import KafkaConsumer
 from waterbeds import Flowerbed1
 import json
@@ -66,6 +67,9 @@ class ConsumerKafka(ConsumerAbstract):
 
         print(self.topics_data)
         self.consumer.subscribe(self.topics_data)
+
+        for topic in self.topics_data:
+            print("Listening on: " + topic, flush=True)
         
 
     def read(self) -> None:
@@ -77,7 +81,8 @@ class ConsumerKafka(ConsumerAbstract):
             topic = message.topic
             value = message.value
             flowerbed_idx = self.topics_data.index(topic)
-            print('message: ' + str(value))
+            
+            # print("message: " + str(flowerbed_idx) + " at: {}".format(datetime.now()), flush=True)
             
             self.flowerbeds[flowerbed_idx].data_insert(value["ftr_vector"], value["timestamp"])
 

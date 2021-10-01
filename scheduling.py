@@ -68,13 +68,27 @@ class Scheduling:
                 # If the watering happens today
                 hours_until_watering = last_prediction["T"]
                 WA = last_prediction["WA"]
-                if(hours_until_watering < 24):
-                    sample_time = last_prediction["timestamp"]
-                    #print("minutes to watering: " + str(hours_until_watering))
-                    time_of_watering = sample_time + hours_until_watering * 3600
-                    # Send to kafka
+                sample_time = last_prediction["timestamp"]
+
+                # If time of watering is less than 24h from now )time.time returs seconds
+                current_time = time.time()
+
+                # Sample time is in miliseconds (needs to be in seconds).
+                # To this time seconds untill watering are added.
+                time_of_watering = (sample_time/1000) + (hours_until_watering * 3600)
+
+                # Hours untill watering from now
+                until_watering_from_now = (time_of_watering - current_time)/3600
+
+                print("flowerbed" + self.predictions_files[prediction_file_indx] + " => hours till now:" + str(until_watering_from_now) + ", time of watering: " + str(time_of_watering), flush=True)
+
+                if(until_watering_from_now < 24):
+                    # Send to kafka (timestamp: current time (in seconds),
+                    # T: time of watering, WA: water amount
+
+                    # Find the topic and post
                     kafka_topic = self.output_topics[prediction_file_indx]
-                    output_dict = {"timestamp": time.time(),
+                    output_dict = {"timestamp": current_time,
                                     "T": datetime.fromtimestamp(time_of_watering).strftime("%Y-%m-%d %H:%M:%S"),
                                     "WA": WA}
                     self.kafka_producer.send(kafka_topic, value=output_dict)

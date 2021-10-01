@@ -32,7 +32,7 @@ def ping_watchdog(process_consumer, process_schedule):
     interval = 30 # ping interval in seconds
     url = "localhost"
     port = 5001
-    path = "/pingCheckIn/Data adapter"
+    path = "/pingCheckIn/Carouge plants watering"
 
     while(process_consumer.is_alive() and process_schedule.is_alive()):
         #print("{}: Pinging.".format(datetime.now()))
