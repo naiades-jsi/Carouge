@@ -1,0 +1,26 @@
+{
+    "hour_of_time_predictions": "06:00",
+    "predictions_files": [
+        "Device_1efd_prediction.json",
+        "Device_1efe_prediction.json",
+        "Device_1eff_prediction.json",
+        "Device_1f0d_prediction.json",
+        "Device_1f02_prediction.json",
+        "Device_1f06_prediction.json",
+        "Device_1f08_prediction.json",
+        "Device_1f09_prediction.json",
+        "Device_1f10_prediction.json"
+    ],
+    "output_topics": [
+        "Device_1efd_pred_output",
+        "Device_1efe_pred_output",
+        "Device_1eff_pred_output",
+        "Device_1f0d_pred_output",
+        "Device_1f02_pred_output",
+        "Device_1f06_pred_output",
+        "Device_1f08_pred_output",
+        "Device_1f09_pred_output",
+        "Device_1f10_pred_output"
+    ],
+    "bootstrap_server": ["localhost:9092"]
+}

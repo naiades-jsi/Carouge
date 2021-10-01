@@ -1,0 +1,125 @@
+{
+    "bootstrap_servers": ["localhost:9092"],
+    "auto_offset_reset": "latest",
+    "enable_auto_commit": "True",
+    "group_id": "my-group",
+    "value_deserializer": "lambda x: loads(x.decode('utf-8'))",
+    "flowerbeds":["Device_1efd", "Device_1efe", "Device_1eff", "Device_1f0d", "Device_1f02", "Device_1f06", "Device_1f08", "Device_1f09", "Device_1f10" ],
+    "Device_1efd": {
+        "name" : "Device_1efd",
+        "topic": "features_carouge_device_1efd_anomaly",
+        "initial_threshold": [17],
+        "forecast_model": "DenseNN_RealData()",
+        "forecast_model_conf": {
+            "loss_coefs": [1, 1],
+            "rise_time":2,
+            "train_data": "train_data_carouge.npy"
+        },
+        "output": [],
+        "output_conf": [{}]
+    },
+    "Device_1efe": {
+        "name" : "Device_1efe",
+        "topic": "features_carouge_device_1efe_anomaly",
+        "initial_threshold": [17],
+        "forecast_model": "DenseNN_RealData()",
+        "forecast_model_conf": {
+            "loss_coefs": [1, 1],
+            "rise_time":2,
+            "train_data": "train_data_carouge.npy"
+        },
+        "output": [],
+        "output_conf": [{}]
+    },
+    "Device_1eff": {
+        "name" : "Device_1eff",
+        "topic": "features_carouge_device_1eff_anomaly",
+        "initial_threshold": [17],
+        "forecast_model": "DenseNN_RealData()",
+        "forecast_model_conf": {
+            "loss_coefs": [1, 1],
+            "rise_time":2,
+            "train_data": "train_data_carouge.npy"
+        },
+        "output": [],
+        "output_conf": [{}]
+    },
+    "Device_1f0d": {
+        "name" : "Device_1f0d",
+        "topic": "features_carouge_device_1f0d_anomaly",
+        "initial_threshold": [17],
+        "forecast_model": "DenseNN_RealData()",
+        "forecast_model_conf": {
+            "loss_coefs": [1, 1],
+            "rise_time":2,
+            "train_data": "train_data_carouge.npy"
+        },
+        "output": [],
+        "output_conf": [{}]
+    },
+    "Device_1f02": {
+        "name" : "Device_1f02",
+        "topic": "features_carouge_device_1f02_anomaly",
+        "initial_threshold": [17],
+        "forecast_model": "DenseNN_RealData()",
+        "forecast_model_conf": {
+            "loss_coefs": [1, 1],
+            "rise_time":2,
+            "train_data": "train_data_carouge.npy"
+        },
+        "output": [],
+        "output_conf": [{}]
+    },
+    "Device_1f06": {
+        "name" : "Device_1f06",
+        "topic": "features_carouge_device_1f06_anomaly",
+        "initial_threshold": [17],
+        "forecast_model": "DenseNN_RealData()",
+        "forecast_model_conf": {
+            "loss_coefs": [1, 1],
+            "rise_time":2,
+            "train_data": "train_data_carouge.npy"
+        },
+        "output": [],
+        "output_conf": [{}]
+    },
+    "Device_1f08": {
+        "name" : "Device_1f08",
+        "topic": "features_carouge_device_1f08_anomaly",
+        "initial_threshold": [17],
+        "forecast_model": "DenseNN_RealData()",
+        "forecast_model_conf": {
+            "loss_coefs": [1, 1],
+            "rise_time":2,
+            "train_data": "train_data_carouge.npy"
+        },
+        "output": [],
+        "output_conf": [{}]
+    },
+    "Device_1f09": {
+        "name" : "Device_1f09",
+        "topic": "features_carouge_device_1f09_anomaly",
+        "initial_threshold": [17],
+        "forecast_model": "DenseNN_RealData()",
+        "forecast_model_conf": {
+            "loss_coefs": [1, 1],
+            "rise_time":2,
+            "train_data": "train_data_carouge.npy"
+        },
+        "output": [],
+        "output_conf": [{}]
+    },
+    "Device_1f10": {
+        "name" : "Device_1f10",
+        "topic": "features_carouge_device_1f10_anomaly",
+        "initial_threshold": [17],
+        "forecast_model": "DenseNN_RealData()",
+        "forecast_model_conf": {
+            "loss_coefs": [1, 1],
+            "rise_time":2,
+            "train_data": "train_data_carouge.npy"
+        },
+        "output": [],
+        "output_conf": [{}]
+    }
+}
