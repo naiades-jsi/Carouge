@@ -93,7 +93,7 @@ class Flowerbed1(FlowerBedAbstract):
         # T-time to next watering
         # WA - watering ammount
         tosend = {
-            "timestamp": timestamp,  #UNIX, s
+            "timestamp": timestamp*1000,  #UNIX, ms
             "T": timetowatering,
             "WA": WA
         }
