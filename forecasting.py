@@ -141,20 +141,20 @@ class DenseNN_RealData(ForecastAbstract):
     def train(self) -> None:
         x_train, y_train = np.load(self.train_data, allow_pickle = True)
 
-        horizon = 72
+        horizon = 79
 
         self.model = tf.keras.Sequential()
-        self.model.add(tf.keras.layers.Dense(4,activation='relu'))
-        self.model.add(tf.keras.layers.Dense(40))
+        self.model.add(tf.keras.layers.Dense(3,activation='relu'))
+        self.model.add(tf.keras.layers.Dense(20))
         self.model.add(tf.keras.layers.Dropout(0.2))
-        self.model.add(tf.keras.layers.Dense(horizon, activation='relu'))
+        self.model.add(tf.keras.layers.Dense(50, activation='relu'))
         self.model.add(tf.keras.layers.Dropout(0.2))
         self.model.add(tf.keras.layers.Dense(horizon, activation='relu'))
 
-        self.model.compile(optimizer =tf.keras.optimizers.Adam(lr = 0.001, beta_1 = 0.95), loss = 'mse')
+        self.model.compile(optimizer =tf.keras.optimizers.Adam(lr = 0.001, beta_1 = 0.99), loss = 'mse')
 
-        batch_size = 5
-        self.model.fit(x_train,y_train, epochs =200, batch_size = batch_size, validation_data = None, verbose = 1)
+        batch_size = 3
+        self.model.fit(x_train,y_train, epochs =1000, batch_size = batch_size, validation_data = None, verbose = 1)
         pass
   
 
@@ -170,12 +170,11 @@ class DenseNN_RealData(ForecastAbstract):
         now = datetime.now()
         current_hour = now.hour
 
-        y_pred = self.model.predict(np.atleast_2d([current_dampness, 0, T, current_hour]))[0]
+        y_pred = self.model.predict(np.atleast_2d([current_dampness, T, current_hour]))[0]
 
         #cut off the time of rising
         #y_pred = y_pred[self.rise_time:]
         
-        print(y_pred)
         #observe the part of the curve which is lower than the current dampness
         y_pred = y_pred[y_pred < current_dampness]
 
@@ -196,18 +195,23 @@ class DenseNN_RealData(ForecastAbstract):
         WAs = np.linspace(0, 100, 100)
         Times = []
         Losses = []
+
+        now = datetime.now()
+        current_hour = now.hour
         
 
-        #Get the loss for all possible watering ammounts
+        #Get the loss for all possible starting moistures
         for i in WAs:
-            y_pred = self.model.predict(np.atleast_2d([current_dampness, i, T, 0]))[0]
+            y_pred = self.model.predict(np.atleast_2d([i, T, current_hour]))[0]
             t = len(y_pred[y_pred>=estimated_th])
             Times.append(t)
             Losses.append(Loss(i, t))
 
         #choose the minimal loss        
         idx = np.argmin(Losses)
-        WA = WAs[idx]
+        WA = WAs[idx] - current_dampness
+        if(WA < 0):
+            WA = 0
         time = Times[idx]
         return(WA)
 
