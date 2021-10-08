@@ -90,7 +90,7 @@ class Flowerbed1(FlowerBedAbstract):
         hour_of_watering = (now.hour + timetowatering)%24
 
         #2. step - when we do water the plants: how much water to use
-        WA = self.forecast_model.predict_WA(current_dampness = self.threshold[0], 
+        WA = self.forecast_model.predict_WA(current_dampness = self.threshold, 
                                         weather_data = None,
                                         estimated_th = self.threshold, 
                                         hour_of_watering = hour_of_watering)
@@ -181,7 +181,7 @@ class FlowerbedAlternative(FlowerBedAbstract):
         hour_of_watering = (now.hour + timetowatering)%24
 
         #2. step - when we do water the plants: how much water to use
-        WA = self.forecast_model.predict_WA(current_dampness = self.threshold[0], 
+        WA = self.forecast_model.predict_WA(current_dampness = self.threshold, 
                                         weather_data = None,
                                         estimated_th = self.threshold, 
                                         hour_of_watering = hour_of_watering)
