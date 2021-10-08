@@ -51,7 +51,7 @@ class Flowerbed1(FlowerBedAbstract):
         #self.drying_model.configure(con = conf["drying_model_conf"])
 
         self.forecast_model = eval(conf["forecast_model"])
-        print('FORECAST MODEL: ' + str(conf["forecast_model"]), flush = True)
+        #print('FORECAST MODEL: ' + str(conf["forecast_model"]), flush = True)
         self.forecast_model.configure(con = conf["forecast_model_conf"])
 
         #self.watering_interval = conf["watering_interval"][0]*24*3600 + conf["watering_interval"][1]*3600 + conf["watering_interval"][2]
