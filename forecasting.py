@@ -71,7 +71,7 @@ class DenseNN(ForecastAbstract):
         self.model.compile(optimizer =tf.keras.optimizers.Adam(lr = 0.001, beta_1 = 0.95), loss = 'mse')
 
         batch_size = 10
-        self.model.fit(x_train,y_train, epochs =20, batch_size = batch_size, validation_data = None, verbose = 1)
+        self.model.fit(x_train,y_train, epochs =20, batch_size = batch_size, validation_data = None, verbose = 0)
         pass
 
     def SimulateSteps(self, watering_ammount, current_val, T):
@@ -154,7 +154,7 @@ class DenseNN_RealData(ForecastAbstract):
         self.model.compile(optimizer =tf.keras.optimizers.Adam(lr = 0.001, beta_1 = 0.99), loss = 'mse')
 
         batch_size = 3
-        self.model.fit(x_train,y_train, epochs =1000, batch_size = batch_size, validation_data = None, verbose = 1)
+        self.model.fit(x_train,y_train, epochs =1000, batch_size = batch_size, validation_data = None, verbose = 0)
         pass
   
 

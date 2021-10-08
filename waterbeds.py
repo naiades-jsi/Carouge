@@ -51,6 +51,7 @@ class Flowerbed1(FlowerBedAbstract):
         #self.drying_model.configure(con = conf["drying_model_conf"])
 
         self.forecast_model = eval(conf["forecast_model"])
+        print('FORECAST MODEL: ' + str(conf["forecast_model"]), flush = True)
         self.forecast_model.configure(con = conf["forecast_model_conf"])
 
         #self.watering_interval = conf["watering_interval"][0]*24*3600 + conf["watering_interval"][1]*3600 + conf["watering_interval"][2]
@@ -73,8 +74,103 @@ class Flowerbed1(FlowerBedAbstract):
 
 
         #self.time = time.time()
+        print('Message inserted: ' + str(value), flush = True)
+        print('Timestamp: ' + str(timestamp), flush = True)
 
         self.current_dampness = value[0]
+
+        #print("Data inserted: " + str(value))
+
+        #1. step - how long untill the current dampness falls under the threshold
+        timetowatering = self.forecast_model.predict_time(current_dampness = self.current_dampness, weather_data = None, estimated_th = self.threshold)
+
+        print('timetowatering: ' + str(timetowatering), flush = True)
+
+        now = datetime.now()
+        hour_of_watering = (now.hour + timetowatering)%24
+
+        #2. step - when we do water the plants: how much water to use
+        WA = self.forecast_model.predict_WA(current_dampness = self.threshold[0], 
+                                        weather_data = None,
+                                        estimated_th = self.threshold, 
+                                        hour_of_watering = hour_of_watering)
+
+        print('WA: ' + str(WA), flush = True)
+
+        # T-time to next watering
+        # WA - watering ammount
+        tosend = {
+            "timestamp": timestamp*1000,  #UNIX, ms
+            "T": timetowatering,
+            "WA": WA
+        }
+
+        self.save_prediction(tosend)
+        
+        for output in self.outputs:
+            output.send_out(value=tosend,
+                            name = self.topic_WA)
+        
+        
+
+    def feedback_insert(self, value: float, timestamp):
+        #correcting the internal threshold once we get the feedback (too wet, too dry)
+        self.threshold = threshold_correction(self.threshold, value)
+
+    def save_prediction(self, tosave):
+        # Make predictions file is it does not exists
+        dir = "./predictions"
+        if not os.path.isdir(dir):
+            os.makedirs(dir)
+
+
+        filename = dir + "/" + self.name + "_prediction.json"
+        file = open(filename, "w")
+        json.dump(tosave, file)
+        file.close()
+
+def threshold_correction(current_threshold, feedback):
+    #if feedback = 1 -> threshold too high
+    #if feedback = -1 -> threshold too low
+    #other correction functions can be added
+    
+    if(feedback == 1):
+        new_threshold = current_threshold*1.1
+    elif(feedback == -1):
+        new_threshold = current_threshold*0.9
+    else:
+        new_threshold = current_threshold
+
+    return(new_threshold)
+
+
+
+class FlowerbedAlternative(FlowerBedAbstract):
+    #Alternative method of forecasting
+
+    def __init__(self) -> None: 
+        pass
+
+    def configure(self, conf: dict):
+        super().configure(conf)
+        self.name = conf["name"]
+        self.threshold = conf["initial_threshold"]
+
+        self.upper_bound_estimation = eval(conf["upper_bound_estimation"])
+        self.upper_bound_estimation.configure(con = conf["UBE_conf"])
+
+
+        self.current_dampness = 0.0
+
+        #self.topic_data = conf["name"] + "_data"
+        pass
+
+    def data_insert(self, value: float, timestamp):
+        # the value here is the dampness from the sensor
+        # the output is time and ammount of watering
+
+        self.current_dampness = value[0]
+
 
         #print("Data inserted: " + str(value))
 
