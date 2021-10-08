@@ -170,7 +170,7 @@ class DenseNN_RealData(ForecastAbstract):
         now = datetime.now()
         current_hour = now.hour
 
-        y_pred = 30*self.model.predict(np.atleast_2d([current_dampness, T, current_hour]))[0]
+        y_pred = self.model.predict(np.atleast_2d([current_dampness, T, current_hour]))[0]
 
         print('predicted profile: ' + str(y_pred), flush = True)
 
