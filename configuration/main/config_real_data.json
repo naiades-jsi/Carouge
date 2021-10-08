@@ -8,7 +8,7 @@
     "Device_1efd": {
         "name" : "Device_1efd",
         "topic": "features_carouge_device_1efd_anomaly",
-        "initial_threshold": [17],
+        "initial_threshold": 10,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -21,7 +21,7 @@
     "Device_1efe": {
         "name" : "Device_1efe",
         "topic": "features_carouge_device_1efe_anomaly",
-        "initial_threshold": [17],
+        "initial_threshold": 10,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -34,7 +34,7 @@
     "Device_1eff": {
         "name" : "Device_1eff",
         "topic": "features_carouge_device_1eff_anomaly",
-        "initial_threshold": [17],
+        "initial_threshold": 10,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -47,7 +47,7 @@
     "Device_1f0d": {
         "name" : "Device_1f0d",
         "topic": "features_carouge_device_1f0d_anomaly",
-        "initial_threshold": [17],
+        "initial_threshold": 10,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -60,7 +60,7 @@
     "Device_1f02": {
         "name" : "Device_1f02",
         "topic": "features_carouge_device_1f02_anomaly",
-        "initial_threshold": [17],
+        "initial_threshold": 10,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -73,7 +73,7 @@
     "Device_1f06": {
         "name" : "Device_1f06",
         "topic": "features_carouge_device_1f06_anomaly",
-        "initial_threshold": [17],
+        "initial_threshold": 10,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -86,7 +86,7 @@
     "Device_1f08": {
         "name" : "Device_1f08",
         "topic": "features_carouge_device_1f08_anomaly",
-        "initial_threshold": [17],
+        "initial_threshold": 10,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -99,7 +99,7 @@
     "Device_1f09": {
         "name" : "Device_1f09",
         "topic": "features_carouge_device_1f09_anomaly",
-        "initial_threshold": [17],
+        "initial_threshold": 10,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -112,7 +112,7 @@
     "Device_1f10": {
         "name" : "Device_1f10",
         "topic": "features_carouge_device_1f10_anomaly",
-        "initial_threshold": [17],
+        "initial_threshold": 10,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
