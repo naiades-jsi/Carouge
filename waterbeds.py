@@ -82,7 +82,7 @@ class Flowerbed1(FlowerBedAbstract):
         #print("Data inserted: " + str(value))
 
         #1. step - how long untill the current dampness falls under the threshold
-        timetowatering = self.forecast_model.predict_time(current_dampness = self.current_dampness, weather_data = None, estimated_th = self.threshold)
+        timetowatering, predicted_profile = self.forecast_model.predict_time(current_dampness = self.current_dampness, weather_data = None, estimated_th = self.threshold)
 
         print('timetowatering: ' + str(timetowatering), flush = True)
 
@@ -102,7 +102,8 @@ class Flowerbed1(FlowerBedAbstract):
         tosend = {
             "timestamp": timestamp*1000,  #UNIX, ms
             "T": timetowatering,
-            "WA": WA
+            "WA": WA,
+            "predicted_profile": predicted_profile
         }
 
         self.save_prediction(tosend)
