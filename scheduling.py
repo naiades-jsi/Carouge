@@ -69,6 +69,7 @@ class Scheduling:
                 hours_until_watering = last_prediction["T"]
                 WA = last_prediction["WA"]
                 sample_time = last_prediction["timestamp"]
+                predicted_profile = last_prediction["predicted_profile"]
 
                 # If time of watering is less than 24h from now )time.time returs seconds
                 current_time = time.time()
@@ -90,8 +91,17 @@ class Scheduling:
                     kafka_topic = self.output_topics[prediction_file_indx]
                     output_dict = {"timestamp": current_time,
                                     "T": datetime.fromtimestamp(time_of_watering).strftime("%Y-%m-%d %H:%M:%S"),
-                                    "WA": WA}
+                                    "WA": WA,
+                                    "predicted_profile": predicted_profile}
                     self.kafka_producer.send(kafka_topic, value=output_dict)
+                else:
+                    kafka_topic = self.output_topics[prediction_file_indx]
+                    output_dict = {"timestamp": current_time,
+                                    "T": None,
+                                    "WA": None,
+                                    "predicted_profile": predicted_profile}
+                    self.kafka_producer.send(kafka_topic, value=output_dict)
+
         return schedule.CancelJob
 
 

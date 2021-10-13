@@ -172,6 +172,8 @@ class DenseNN_RealData(ForecastAbstract):
 
         y_pred = self.model.predict(np.atleast_2d([current_dampness, T, current_hour]))[0]
 
+        expected_profile = y_pred.copy()
+
         #print('predicted profile: ' + str(y_pred), flush = True)
 
         #cut off the time of rising
@@ -183,7 +185,7 @@ class DenseNN_RealData(ForecastAbstract):
         #finally get the time it takes to reach the threshold (in hours, the cap is 72 intervals -- 24h)
         t = len(y_pred[y_pred>=estimated_th])/3
 
-        return(t)
+        return(t, expected_profile)
 
     def predict_WA(self, current_dampness: float, weather_data: list, estimated_th: float = 0, hour_of_watering: int = 0):
 
