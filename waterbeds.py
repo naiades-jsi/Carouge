@@ -103,7 +103,7 @@ class Flowerbed1(FlowerBedAbstract):
             "timestamp": timestamp*1000,  #UNIX, ms
             "T": timetowatering,
             "WA": WA,
-            "predicted_profile": predicted_profile
+            "predicted_profile": list(predicted_profile)
         }
 
         self.save_prediction(tosend)
