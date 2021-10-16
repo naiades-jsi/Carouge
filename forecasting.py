@@ -158,7 +158,7 @@ class DenseNN_RealData(ForecastAbstract):
         pass
   
 
-    def predict_time(self, current_dampness: float, weather_data: list, estimated_th: float = 0) -> None:
+    def predict_time(self, current_dampness: float, weather_data: list, estimated_th: float = 0):
 
         #TODO: include weather data
         #T = weather_data[0]
@@ -174,7 +174,7 @@ class DenseNN_RealData(ForecastAbstract):
 
         expected_profile = list(y_pred)
 
-        #print('predicted profile: ' + str(), flush = True)
+        print('predicted profile: ' + str(), flush = True)
 
         #cut off the time of rising
         #y_pred = y_pred[self.rise_time:]
