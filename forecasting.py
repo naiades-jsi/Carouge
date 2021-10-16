@@ -174,7 +174,7 @@ class DenseNN_RealData(ForecastAbstract):
 
         expected_profile = list(y_pred)
 
-        print('predicted profile: ' + str(), flush = True)
+        print('predicted profile: ' + str(expected_profile), flush = True)
 
         #cut off the time of rising
         #y_pred = y_pred[self.rise_time:]
