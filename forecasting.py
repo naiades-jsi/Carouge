@@ -172,9 +172,9 @@ class DenseNN_RealData(ForecastAbstract):
 
         y_pred = self.model.predict(np.atleast_2d([current_dampness, T, current_hour]))[0]
 
-        expected_profile = list(y_pred)
+        expected_profile = [float(i) for i in y_pred]
 
-        print('predicted profile: ' + str(expected_profile), flush = True)
+        #print('predicted profile: ' + str(expected_profile), flush = True)
 
         #cut off the time of rising
         #y_pred = y_pred[self.rise_time:]
