@@ -101,12 +101,16 @@ class Flowerbed1(FlowerBedAbstract):
         # WA - watering ammount
         profile_to_send = [float(i) for i in predicted_profile]
 
+        print('profile to send: ' + str(profile_to_send), flush = True)
+
         tosend = {
             "timestamp": timestamp*1000,  #UNIX, ms
             "T": timetowatering,
             "WA": WA,
             "predicted_profile": profile_to_send
         }
+
+        print('to send: ' + str(tosend), flush = True)
 
         self.save_prediction(tosend)
         
