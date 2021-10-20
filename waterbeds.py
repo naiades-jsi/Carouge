@@ -44,22 +44,11 @@ class Flowerbed1(FlowerBedAbstract):
         self.name = conf["name"]
         self.threshold = conf["initial_threshold"]
 
-        #how early before the scheduled watering time the W.A. is calculated (seconds)
-        #self.watering_info = conf["watering_info"]
-
-        #self.drying_model = eval(conf["drying_model"])
-        #self.drying_model.configure(con = conf["drying_model_conf"])
-
         self.forecast_model = eval(conf["forecast_model"])
-        #print('FORECAST MODEL: ' + str(conf["forecast_model"]), flush = True)
+    
         self.forecast_model.configure(con = conf["forecast_model_conf"])
 
-        #self.watering_interval = conf["watering_interval"][0]*24*3600 + conf["watering_interval"][1]*3600 + conf["watering_interval"][2]
-
-        #self.loss_coefs = conf["loss_coefs"]
-
         self.current_dampness = 0.0
-        #self.next_watering = time.time() + self.watering_interval
 
 
         #TODO: fix this!!
@@ -84,7 +73,7 @@ class Flowerbed1(FlowerBedAbstract):
         #1. step - how long untill the current dampness falls under the threshold
         timetowatering, predicted_profile = self.forecast_model.predict_time(current_dampness = self.current_dampness, weather_data = None, estimated_th = self.threshold)
 
-        print('timetowatering: ' + str(timetowatering), flush = True)
+        #print('timetowatering: ' + str(timetowatering), flush = True)
 
         now = datetime.now()
         hour_of_watering = (now.hour + timetowatering)%24
@@ -95,13 +84,13 @@ class Flowerbed1(FlowerBedAbstract):
                                         estimated_th = self.threshold, 
                                         hour_of_watering = hour_of_watering)
 
-        print('WA: ' + str(WA), flush = True)
+        #print('WA: ' + str(WA), flush = True)
 
         # T-time to next watering
         # WA - watering ammount
         profile_to_send = [float(i) for i in predicted_profile]
 
-        print('profile to send: ' + str(profile_to_send), flush = True)
+        #print('profile to send: ' + str(profile_to_send), flush = True)
 
         tosend = {
             "timestamp": timestamp*1000,  #UNIX, ms
@@ -110,7 +99,7 @@ class Flowerbed1(FlowerBedAbstract):
             "predicted_profile": profile_to_send
         }
 
-        print('to send: ' + str(tosend), flush = True)
+        #print('to send: ' + str(tosend), flush = True)
 
         self.save_prediction(tosend)
         
@@ -161,10 +150,14 @@ class FlowerbedAlternative(FlowerBedAbstract):
     def configure(self, conf: dict):
         super().configure(conf)
         self.name = conf["name"]
-        self.threshold = conf["initial_threshold"]
+        self.upper_bound = conf["initial_threshold_upper"]
+        self.lower_bound = conf["initial_threshold_lower"]
 
         self.upper_bound_estimation = eval(conf["upper_bound_estimation"])
         self.upper_bound_estimation.configure(con = conf["UBE_conf"])
+
+        self.forecast_model = eval(conf["forecast_model"])
+        self.forecast_model.configure(con = conf["forecast_model_conf"])
 
 
         self.current_dampness = 0.0
@@ -182,7 +175,15 @@ class FlowerbedAlternative(FlowerBedAbstract):
         #print("Data inserted: " + str(value))
 
         #1. step - how long untill the current dampness falls under the threshold
+        UB = self.upper_bound_estimation(current_dampness = self.current_dampness)
+
         timetowatering, predicted_profile = self.forecast_model.predict_time(current_dampness = self.current_dampness, weather_data = None, estimated_th = self.threshold)
+
+
+        if(UB):
+            self.upper_bound = UB
+
+        WA = self.upper_bound - self.lower_bound
 
         now = datetime.now()
         hour_of_watering = (now.hour + timetowatering)%24
