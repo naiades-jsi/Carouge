@@ -4,7 +4,7 @@
     "enable_auto_commit": "True",
     "group_id": "my-group",
     "value_deserializer": "lambda x: loads(x.decode('utf-8'))",
-    "flowerbeds":["Device1efe", "Device_1eff", "Device_1f0d", "Device_1f02", "Device_1f06", "Device_1f08", "Device_1f10"],
+    "flowerbeds":["Device_1efe", "Device_1eff", "Device_1f0d", "Device_1f02", "Device_1f06", "Device_1f08", "Device_1f10"],
     "Device_1efe": {
         "name" : "Device_1efe",
         "topic": "features_carouge_flowerbed8",
