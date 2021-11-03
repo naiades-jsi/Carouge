@@ -53,7 +53,7 @@ class Flowerbed1(FlowerBedAbstract):
 
         #TODO: fix this!!
         self.topic_data = conf["name"] + "_data"
-        self.topic_WA = conf["name"] + "_WA"
+        #self.topic_WA = conf["name"] + "_WA"
         pass
 
     def data_insert(self, value: float, timestamp):
@@ -62,51 +62,56 @@ class Flowerbed1(FlowerBedAbstract):
         # the output is time and ammount of watering
 
 
-        #self.time = time.time()
-        print('Message inserted: ' + str(value), flush = True)
-        print('Timestamp: ' + str(timestamp), flush = True)
+        if(np.isnan([float(i) for i in value]).any()):
+            print('NaN in message')
+            pass
+        else:
 
-        self.current_dampness = value[0]
+            print('Message inserted: ' + str(value), flush = True)
+            print('Timestamp: ' + str(timestamp), flush = True)
 
-        #print("Data inserted: " + str(value))
+            self.current_dampness = value[0]
+            self.temp = value[1]
 
-        #1. step - how long untill the current dampness falls under the threshold
-        timetowatering, predicted_profile = self.forecast_model.predict_time(current_dampness = self.current_dampness, weather_data = None, estimated_th = self.threshold)
+            #print("Data inserted: " + str(value))
 
-        #print('timetowatering: ' + str(timetowatering), flush = True)
+            #1. step - how long untill the current dampness falls under the threshold
+            timetowatering, predicted_profile = self.forecast_model.predict_time(current_dampness = self.current_dampness, weather_data = [self.temp], estimated_th = self.threshold)
 
-        now = datetime.now()
-        hour_of_watering = (now.hour + timetowatering)%24
+            #print('timetowatering: ' + str(timetowatering), flush = True)
 
-        #2. step - when we do water the plants: how much water to use
-        WA = self.forecast_model.predict_WA(current_dampness = self.threshold, 
-                                        weather_data = None,
-                                        estimated_th = self.threshold, 
-                                        hour_of_watering = hour_of_watering)
+            now = datetime.now()
+            hour_of_watering = (now.hour + timetowatering)%24
 
-        #print('WA: ' + str(WA), flush = True)
+            #2. step - when we do water the plants: how much water to use
+            WA = self.forecast_model.predict_WA(current_dampness = self.threshold, 
+                                            weather_data = [self.temp],
+                                            estimated_th = self.threshold, 
+                                            hour_of_watering = hour_of_watering)
 
-        # T-time to next watering
-        # WA - watering ammount
-        profile_to_send = [float(i) for i in predicted_profile]
+            #print('WA: ' + str(WA), flush = True)
 
-        #print('profile to send: ' + str(profile_to_send), flush = True)
+            # T-time to next watering
+            # WA - watering ammount
+            profile_to_send = [float(i) for i in predicted_profile]
 
-        tosend = {
-            "timestamp": timestamp*1000,  #UNIX, ms
-            "T": timetowatering,
-            "WA": WA,
-            "predicted_profile": profile_to_send
-        }
+            #print('profile to send: ' + str(profile_to_send), flush = True)
 
-        #print('to send: ' + str(tosend), flush = True)
+            tosend = {
+                "timestamp": timestamp*1000,  #UNIX, ms
+                "T": timetowatering,
+                "WA": WA,
+                "predicted_profile": profile_to_send
+            }
 
-        self.save_prediction(tosend)
-        
-        for output in self.outputs:
-            output.send_out(value=tosend,
-                            name = self.topic_WA)
-        
+            #print('to send: ' + str(tosend), flush = True)
+
+            self.save_prediction(tosend)
+            
+            for output in self.outputs:
+                output.send_out(value=tosend,
+                                name = self.topic_WA)
+            
         
 
     def feedback_insert(self, value: float, timestamp):

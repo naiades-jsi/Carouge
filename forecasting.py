@@ -162,7 +162,7 @@ class DenseNN_RealData(ForecastAbstract):
 
         #TODO: include weather data
         #T = weather_data[0]
-        T = 22
+        T = weather_data[0]
 
         Ts = []
         
@@ -191,7 +191,7 @@ class DenseNN_RealData(ForecastAbstract):
 
         #TODO: include weather data
         #T = weather_data[0]
-        T = 22
+        T = weather_data[0]
 
         #Loss function to minimize
         Loss = lambda WA, time: self.loss_coefs[0]*WA - self.loss_coefs[1]*time
