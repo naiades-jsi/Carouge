@@ -67,8 +67,8 @@ class Flowerbed1(FlowerBedAbstract):
             pass
         else:
 
-            print('Message inserted: ' + str(value), flush = True)
-            print('Timestamp: ' + str(timestamp), flush = True)
+            #print('Message inserted: ' + str(value), flush = True)
+            #print('Timestamp: ' + str(timestamp), flush = True)
 
             self.current_dampness = value[0]
             self.temp = value[1]
@@ -124,11 +124,11 @@ class Flowerbed1(FlowerBedAbstract):
         if not os.path.isdir(dir):
             os.makedirs(dir)
 
-
         filename = dir + "/" + self.name + "_prediction.json"
-        file = open(filename, "w")
-        json.dump(tosave, file)
-        file.close()
+
+        with open(filename, mode='w', encoding='utf-8') as f:
+            json.dump(tosave, f)
+    
 
 def threshold_correction(current_threshold, feedback):
     #if feedback = 1 -> threshold too high

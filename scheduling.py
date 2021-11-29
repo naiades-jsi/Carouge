@@ -76,7 +76,10 @@ class Scheduling:
 
                 # Sample time is in miliseconds (needs to be in seconds).
                 # To this time seconds untill watering are added.
-                time_of_watering = (sample_time/1000) + (hours_until_watering * 3600)
+                time_of_watering = (sample_time/1000000) + (hours_until_watering * 3600)
+
+                print(f'{time_of_watering = }')
+                print(f'{current_time = }')
 
                 # Hours untill watering from now
                 until_watering_from_now = (time_of_watering - current_time)/3600
