@@ -92,11 +92,13 @@ class Scheduling:
 
                     # Find the topic and post
                     kafka_topic = self.output_topics[prediction_file_indx]
+                    print(f'{kafka_topic = }')
                     output_dict = {"timestamp": current_time,
                                     "T": datetime.fromtimestamp(time_of_watering).strftime("%Y-%m-%d %H:%M:%S"),
                                     "WA": WA,
                                     "predicted_profile": predicted_profile}
                     self.kafka_producer.send(kafka_topic, value=output_dict)
+                    print(f'{output_dict = }')
                 else:
                     kafka_topic = self.output_topics[prediction_file_indx]
                     output_dict = {"timestamp": current_time,
@@ -104,6 +106,7 @@ class Scheduling:
                                     "WA": None,
                                     "predicted_profile": predicted_profile}
                     self.kafka_producer.send(kafka_topic, value=output_dict)
+                    print(f'{output_dict = }')
 
         return schedule.CancelJob
 
