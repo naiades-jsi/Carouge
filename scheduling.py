@@ -78,15 +78,15 @@ class Scheduling:
                 # To this time seconds untill watering are added.
                 time_of_watering = (sample_time/1000000) + (hours_until_watering * 3600)
 
-                print(f'{time_of_watering = }')
-                print(f'{current_time = }')
+                #print(f'{time_of_watering = }')
+                #print(f'{current_time = }')
 
                 # Hours untill watering from now
                 until_watering_from_now = (time_of_watering - current_time)/3600
 
                 print("flowerbed" + self.predictions_files[prediction_file_indx] + " => hours till now:" + str(until_watering_from_now) + ", time of watering: " + str(time_of_watering), flush=True)
 
-                if(until_watering_from_now < 24):
+                if((until_watering_from_now < 24) and (until_watering_from_now > -10)):
                     # Send to kafka (timestamp: current time (in seconds),
                     # T: time of watering, WA: water amount
 
@@ -107,8 +107,6 @@ class Scheduling:
                                     "predicted_profile": predicted_profile}
                     self.kafka_producer.send(kafka_topic, value=output_dict)
                     print(f'{output_dict = }')
-
-        return schedule.CancelJob
 
 
     def run(self) -> None:
