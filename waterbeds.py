@@ -65,6 +65,8 @@ class Flowerbed1(FlowerBedAbstract):
         if(np.isnan([float(i) for i in value]).any()):
             print('NaN in message')
             pass
+        elif(len(value)!=7):
+            pass
         else:
 
             #print('Message inserted: ' + str(value), flush = True)
