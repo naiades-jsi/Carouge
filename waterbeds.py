@@ -71,12 +71,11 @@ class Flowerbed1(FlowerBedAbstract):
             #print('Timestamp: ' + str(timestamp), flush = True)
 
             self.current_dampness = value[0]
-            self.temp = value[1]
 
             #print("Data inserted: " + str(value))
 
             #1. step - how long untill the current dampness falls under the threshold
-            timetowatering, predicted_profile = self.forecast_model.predict_time(current_dampness = self.current_dampness, weather_data = [self.temp], estimated_th = self.threshold)
+            timetowatering, predicted_profile = self.forecast_model.predict_time(current_dampness = self.current_dampness,fv = value, estimated_th = self.threshold)
 
             #print('timetowatering: ' + str(timetowatering), flush = True)
 
@@ -84,8 +83,8 @@ class Flowerbed1(FlowerBedAbstract):
             hour_of_watering = (now.hour + timetowatering)%24
 
             #2. step - when we do water the plants: how much water to use
-            WA = self.forecast_model.predict_WA(current_dampness = self.threshold, 
-                                            weather_data = [self.temp],
+            WA = self.forecast_model.predict_WA(current_dampness = self.current_dampness, 
+                                            fv = value,
                                             estimated_th = self.threshold, 
                                             hour_of_watering = hour_of_watering)
 

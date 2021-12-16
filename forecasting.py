@@ -90,7 +90,7 @@ class DenseNN(ForecastAbstract):
         Ts = []
         
         #get the full curve which descends from 100% to 0%
-        y_pred = self.model.predict(np.atleast_2d([100, 0, T]))[0]
+        y_pred = 30*self.model.predict(np.atleast_2d([100, 0, T]))[0]
 
         #cut off the time of rising
         y_pred = y_pred[self.rise_time:]
@@ -114,7 +114,7 @@ class DenseNN(ForecastAbstract):
 
         #Get the loss for all possible watering ammounts
         for i in WAs:
-            y_pred = self.model.predict(np.atleast_2d([i, current_dampness, T]))[0]
+            y_pred = 30*self.model.predict(np.atleast_2d([i, current_dampness, T]))[0]
             t = len(y_pred[y_pred>=estimated_th])
             Times.append(t)
             Losses.append(Loss(i, t))
@@ -141,36 +141,28 @@ class DenseNN_RealData(ForecastAbstract):
     def train(self) -> None:
         x_train, y_train = np.load(self.train_data, allow_pickle = True)
 
-        horizon = 79
+        horizon = 80
 
         self.model = tf.keras.Sequential()
-        self.model.add(tf.keras.layers.Dense(3,activation='relu'))
-        self.model.add(tf.keras.layers.Dense(20))
+        self.model.add(tf.keras.layers.Dense(len(x_train[0]),activation='relu'))
+        self.model.add(tf.keras.layers.Dense(100))
         self.model.add(tf.keras.layers.Dropout(0.2))
-        self.model.add(tf.keras.layers.Dense(50, activation='relu'))
+        self.model.add(tf.keras.layers.Dense(200, activation='relu'))
         self.model.add(tf.keras.layers.Dropout(0.2))
         self.model.add(tf.keras.layers.Dense(horizon, activation='relu'))
 
         self.model.compile(optimizer =tf.keras.optimizers.Adam(lr = 0.001, beta_1 = 0.99), loss = 'mse')
 
-        batch_size = 3
-        self.model.fit(x_train,y_train, epochs =1000, batch_size = batch_size, validation_data = None, verbose = 0)
+        batch_size = 50
+        self.model.fit(x_train,y_train, epochs =500, batch_size = batch_size, validation_data = None, verbose = 0)
         pass
   
 
-    def predict_time(self, current_dampness: float, weather_data: list, estimated_th: float = 0):
-
-        #TODO: include weather data
-        #T = weather_data[0]
-        T = weather_data[0]
+    def predict_time(self, current_dampness, fv, estimated_th: float = 0):
 
         Ts = []
-        
-        #get the full curve which descends from 100% to 0%
-        now = datetime.now()
-        current_hour = now.hour
 
-        y_pred = self.model.predict(np.atleast_2d([current_dampness, T, current_hour]))[0]
+        y_pred = self.model.predict(np.atleast_2d(fv))[0]
 
         expected_profile = [float(i) for i in y_pred]
 
@@ -178,21 +170,17 @@ class DenseNN_RealData(ForecastAbstract):
 
         #cut off the time of rising
         #y_pred = y_pred[self.rise_time:]
-        
-        #observe the part of the curve which is lower than the current dampness
-        y_pred = y_pred[y_pred < current_dampness]
 
-        #finally get the time it takes to reach the threshold (in hours, the cap is 72 intervals -- 24h)
-        t = len(y_pred[y_pred>=estimated_th])/3
+        y_pred = np.add(y_pred, (current_dampness - y_pred[0]))
+
+        #get the time it takes to reach the threshold (in hours, the cap is 72 intervals -- 24h)
+        t = len(y_pred[y_pred>=estimated_th])/1.5
 
         return(t, expected_profile)
 
-    def predict_WA(self, current_dampness: float, weather_data: list, estimated_th: float = 0, hour_of_watering: int = 0):
+    def predict_WA(self, current_dampness: float, fv, estimated_th: float = 0, hour_of_watering: int = 0):
 
-        #TODO: include weather data
-        #T = weather_data[0]
-        T = weather_data[0]
-
+        
         #Loss function to minimize
         Loss = lambda WA, time: self.loss_coefs[0]*WA - self.loss_coefs[1]*time
 
@@ -205,9 +193,12 @@ class DenseNN_RealData(ForecastAbstract):
         
 
         #Get the loss for all possible starting moistures
+        fv_copy = fv.copy()
         for i in WAs:
-            y_pred = self.model.predict(np.atleast_2d([i, T, current_hour]))[0]
-            t = len(y_pred[y_pred>=estimated_th])
+            fv_copy[0] = current_dampness + i
+            fv_copy[1] = current_dampness + i
+            y_pred = self.model.predict(np.atleast_2d(fv))[0]
+            t = len(y_pred[y_pred>=estimated_th])/1.5
             Times.append(t)
             Losses.append(Loss(i, t))
 
