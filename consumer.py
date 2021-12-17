@@ -63,7 +63,9 @@ class ConsumerKafka(ConsumerAbstract):
                         auto_offset_reset=con['auto_offset_reset'],
                         enable_auto_commit=con['enable_auto_commit'],
                         group_id=con['group_id'],
-                        value_deserializer=eval(con['value_deserializer']))
+                        value_deserializer=eval(con['value_deserializer']),
+                        max_poll_records = 50,
+                        max_poll_interval_ms = 600000)
 
         print(self.topics_data)
         self.consumer.subscribe(self.topics_data)
