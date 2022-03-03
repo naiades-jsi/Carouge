@@ -4,9 +4,9 @@
     "enable_auto_commit": "True",
     "group_id": "my-group",
     "value_deserializer": "lambda x: loads(x.decode('utf-8'))",
-    "flowerbeds":["Device_1efe", "Device_1eff", "Device_1f0d", "Device_1f02", "Device_1f06", "Device_1f08", "Device_1f10"],
-    "Device_1efe": {
-        "name" : "Device_1efe",
+    "flowerbeds":["device_1efe", "device_1eff", "device_1f0d", "device_1f02", "device_1f06", "device_1f08", "device_1f10"],
+    "device_1efe": {
+        "name" : "device_1efe",
         "topic": "features_carouge_flowerbed8",
         "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
@@ -18,8 +18,8 @@
         "output": [],
         "output_conf": [{}]
     },
-    "Device_1eff": {
-        "name" : "Device_1eff",
+    "device_1eff": {
+        "name" : "device_1eff",
         "topic": "features_carouge_flowerbed6",
         "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
@@ -31,8 +31,8 @@
         "output": [],
         "output_conf": [{}]
     },
-    "Device_1f0d": {
-        "name" : "Device_1f0d",
+    "device_1f0d": {
+        "name" : "device_1f0d",
         "topic": "features_carouge_flowerbed1",
         "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
@@ -44,8 +44,8 @@
         "output": [],
         "output_conf": [{}]
     },
-    "Device_1f02": {
-        "name" : "Device_1f02",
+    "device_1f02": {
+        "name" : "device_1f02",
         "topic": "features_carouge_flowerbed7",
         "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
@@ -57,8 +57,8 @@
         "output": [],
         "output_conf": [{}]
     },
-    "Device_1f06": {
-        "name" : "Device_1f06",
+    "device_1f06": {
+        "name" : "device_1f06",
         "topic": "features_carouge_flowerbed4",
         "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
@@ -70,8 +70,8 @@
         "output": [],
         "output_conf": [{}]
     },
-    "Device_1f08": {
-        "name" : "Device_1f08",
+    "device_1f08": {
+        "name" : "device_1f08",
         "topic": "features_carouge_flowerbed2",
         "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
@@ -83,8 +83,8 @@
         "output": [],
         "output_conf": [{}]
     },
-    "Device_1f10": {
-        "name" : "Device_1f10",
+    "device_1f10": {
+        "name" : "device_1f10",
         "topic": "features_carouge_flowerbed3",
         "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
