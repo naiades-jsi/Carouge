@@ -194,13 +194,10 @@ class DenseNN_RealData(ForecastAbstract):
         for i in WAs:
             fv_copy[0] = current_dampness + i
             fv_copy[1] = current_dampness + i
-            y_pred = 30*self.model.predict(np.atleast_2d(np.array(fv)/30))[0]
+            y_pred = 30*self.model.predict(np.atleast_2d(np.array(fv_copy)/30))[0]
             t = len(y_pred[y_pred>=estimated_th])/1.5
             Times.append(t)
             Losses.append(Loss(i, t))
-
-        print(Losses)
-        print(Times)
 
         #choose the minimal loss        
         idx = np.argmin(Losses)
