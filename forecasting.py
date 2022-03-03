@@ -164,19 +164,12 @@ class DenseNN_RealData(ForecastAbstract):
 
         y_pred = 30*self.model.predict(np.atleast_2d(np.array(fv)/30))[0]
 
-        expected_profile = [float(i) for i in y_pred]
-
-        #print('predicted profile: ' + str(expected_profile), flush = True)
-
-        #cut off the time of rising
-        #y_pred = y_pred[self.rise_time:]
-
-        print(f'{current_dampness = }')
-        print(f'{y_pred = }')
+        
 
         y_pred = np.add(y_pred, (current_dampness - y_pred[0]))
 
-        print(f'{y_pred = }')
+        expected_profile = [float(i) for i in y_pred]
+
         #get the time it takes to reach the threshold (in hours, the cap is 72 intervals -- 24h)
         t = len(y_pred[y_pred>=estimated_th])/1.5
 
