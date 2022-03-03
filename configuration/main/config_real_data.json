@@ -8,12 +8,12 @@
     "Device_1efe": {
         "name" : "Device_1efe",
         "topic": "features_carouge_flowerbed8",
-        "initial_threshold": 20,
+        "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_weather.npy"
+            "train_data": "train_data_carouge_updated.npy"
         },
         "output": [],
         "output_conf": [{}]
@@ -21,12 +21,12 @@
     "Device_1eff": {
         "name" : "Device_1eff",
         "topic": "features_carouge_flowerbed6",
-        "initial_threshold": 20,
+        "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_weather.npy"
+            "train_data": "train_data_carouge_updated.npy"
         },
         "output": [],
         "output_conf": [{}]
@@ -34,12 +34,12 @@
     "Device_1f0d": {
         "name" : "Device_1f0d",
         "topic": "features_carouge_flowerbed1",
-        "initial_threshold": 20,
+        "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_weather.npy"
+            "train_data": "train_data_carouge_updated.npy"
         },
         "output": [],
         "output_conf": [{}]
@@ -47,12 +47,12 @@
     "Device_1f02": {
         "name" : "Device_1f02",
         "topic": "features_carouge_flowerbed7",
-        "initial_threshold": 20,
+        "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_weather.npy"
+            "train_data": "train_data_carouge_updated.npy"
         },
         "output": [],
         "output_conf": [{}]
@@ -60,12 +60,12 @@
     "Device_1f06": {
         "name" : "Device_1f06",
         "topic": "features_carouge_flowerbed4",
-        "initial_threshold": 20,
+        "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_weather.npy"
+            "train_data": "train_data_carouge_updated.npy"
         },
         "output": [],
         "output_conf": [{}]
@@ -73,12 +73,12 @@
     "Device_1f08": {
         "name" : "Device_1f08",
         "topic": "features_carouge_flowerbed2",
-        "initial_threshold": 20,
+        "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_weather.npy"
+            "train_data": "train_data_carouge_updated.npy"
         },
         "output": [],
         "output_conf": [{}]
@@ -86,12 +86,12 @@
     "Device_1f10": {
         "name" : "Device_1f10",
         "topic": "features_carouge_flowerbed3",
-        "initial_threshold": 20,
+        "initial_threshold": 22,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_weather.npy"
+            "train_data": "train_data_carouge_updated.npy"
         },
         "output": [],
         "output_conf": [{}]
