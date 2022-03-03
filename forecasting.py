@@ -199,6 +199,9 @@ class DenseNN_RealData(ForecastAbstract):
             Times.append(t)
             Losses.append(Loss(i, t))
 
+        print(Losses)
+        print(Times)
+
         #choose the minimal loss        
         idx = np.argmin(Losses)
         WA = WAs[idx] - current_dampness
