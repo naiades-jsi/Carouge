@@ -171,7 +171,7 @@ class DenseNN_RealData(ForecastAbstract):
         expected_profile = [float(i) for i in y_pred]
 
         #get the time it takes to reach the threshold (in hours, the cap is 72 intervals -- 24h)
-        t = len(y_pred[y_pred>=estimated_th])/1.5
+        t = len(y_pred[y_pred>=estimated_th])*2
 
         return(t, expected_profile)
 
