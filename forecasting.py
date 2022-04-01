@@ -195,6 +195,9 @@ class DenseNN_RealData(ForecastAbstract):
             fv_copy[0] = current_dampness + i
             fv_copy[1] = current_dampness + i
             y_pred = 30*self.model.predict(np.atleast_2d(np.array(fv_copy)/30))[0]
+            
+            y_pred = np.add(y_pred, current_dampness + i - y_pred[0])
+
             t = len(y_pred[y_pred>=estimated_th])*2       #2-hour intervals
             Times.append(t)
             Losses.append(Loss(i, t))
