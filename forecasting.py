@@ -177,11 +177,12 @@ class DenseNN_RealData(ForecastAbstract):
 
     def predict_WA(self, current_dampness: float, fv, estimated_th: float = 0, hour_of_watering: int = 0):
 
+        ratio = 0.093
         
         #Loss function to minimize
-        Loss = lambda WA, time: self.loss_coefs[0]*WA - self.loss_coefs[1]*time
+        Loss = lambda WA, time: self.loss_coefs[0]*WA/ratio - self.loss_coefs[1]*time
 
-        WAs = np.linspace(0, 100, 100)
+        WAs = np.linspace(0, 40, 100)
         Times = []
         Losses = []
 
@@ -204,7 +205,7 @@ class DenseNN_RealData(ForecastAbstract):
 
         #choose the minimal loss        
         idx = np.argmin(Losses)
-        WA = WAs[idx] - current_dampness
+        WA = WAs[idx]/ratio
         if(WA < 0):
             WA = 0
         time = Times[idx]
