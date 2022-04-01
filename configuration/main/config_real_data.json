@@ -13,7 +13,7 @@
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_updated.npy"
+            "train_data": "flowerbed8_160h_new.npy"
         },
         "output": [],
         "output_conf": [{}]
@@ -26,7 +26,7 @@
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_updated.npy"
+            "train_data": "flowerbed6_160h_new.npy"
         },
         "output": [],
         "output_conf": [{}]
@@ -39,7 +39,7 @@
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_updated.npy"
+            "train_data": "flowerbed1_160h_new.npy"
         },
         "output": [],
         "output_conf": [{}]
@@ -52,7 +52,7 @@
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_updated.npy"
+            "train_data": "flowerbed7_160h_new.npy"
         },
         "output": [],
         "output_conf": [{}]
@@ -65,7 +65,7 @@
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_updated.npy"
+            "train_data": "flowerbed4_160h_new.npy"
         },
         "output": [],
         "output_conf": [{}]
@@ -78,7 +78,7 @@
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_updated.npy"
+            "train_data": "flowerbed2_160h_new.npy"
         },
         "output": [],
         "output_conf": [{}]
@@ -91,7 +91,7 @@
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
             "rise_time":2,
-            "train_data": "train_data_carouge_updated.npy"
+            "train_data": "flowerbed3_160h_new.npy"
         },
         "output": [],
         "output_conf": [{}]

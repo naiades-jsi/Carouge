@@ -49,6 +49,7 @@ class Flowerbed1(FlowerBedAbstract):
         self.forecast_model.configure(con = conf["forecast_model_conf"])
 
         self.current_dampness = 0.0
+        self.last_feedback = 0
 
 
         #TODO: fix this!!
@@ -116,8 +117,25 @@ class Flowerbed1(FlowerBedAbstract):
         
 
     def feedback_insert(self, value: float, timestamp):
-        #correcting the internal threshold once we get the feedback (too wet, too dry)
-        self.threshold = threshold_correction(self.threshold, value)
+         #correcting the internal threshold once we get the feedback (too wet, too dry)
+        times = 1
+        if(value[0] != self.last_feedback):
+            #time between consecutive feedbacks (seconds)
+            #TODO: calculate the difference
+            diff = 0
+            if(diff < 3600):
+                times = 2
+
+            if(value[1] == 'Dry plants'):
+                self.threshold = threshold_correction(self.threshold, feedback = 'increase', times = times)
+                print(f'{self.name} threshold increased to {self.threshold}', flush = True)
+            elif(value[1] == 'No watering required'):
+                self.threshold = threshold_correction(self.threshold, feedback = 'decrease', times = times)
+                print(f'{self.name} threshold decreased to {self.threshold}', flush = True)
+            else:
+                pass
+        else:
+            pass
 
     def save_prediction(self, tosave):
         # Make predictions file is it does not exists
@@ -129,22 +147,6 @@ class Flowerbed1(FlowerBedAbstract):
 
         with open(filename, mode='w', encoding='utf-8') as f:
             json.dump(tosave, f)
-    
-
-def threshold_correction(current_threshold, feedback):
-    #if feedback = 1 -> threshold too high
-    #if feedback = -1 -> threshold too low
-    #other correction functions can be added
-    
-    if(feedback == 1):
-        new_threshold = current_threshold*1.1
-    elif(feedback == -1):
-        new_threshold = current_threshold*0.9
-    else:
-        new_threshold = current_threshold
-
-    return(new_threshold)
-
 
 
 class FlowerbedAlternative(FlowerBedAbstract):
@@ -219,7 +221,24 @@ class FlowerbedAlternative(FlowerBedAbstract):
 
     def feedback_insert(self, value: float, timestamp):
         #correcting the internal threshold once we get the feedback (too wet, too dry)
-        self.threshold = threshold_correction(self.threshold, value)
+        times = 1
+        if(value[0] != self.last_feedback):
+            #time between consecutive feedbacks (seconds)
+            #TODO: calculate the difference
+            diff = 0
+            if(diff < 3600):
+                times = 2
+
+            if(value[1] == 'Dry plants'):
+                self.threshold = threshold_correction(self.threshold, feedback = 'increase', times = times)
+                print(f'{self.name} threshold increased to {self.threshold}', flush = True)
+            elif(value[1] == 'No watering required'):
+                self.threshold = threshold_correction(self.threshold, feedback = 'decrease', times = times)
+                print(f'{self.name} threshold decreased to {self.threshold}', flush = True)
+            else:
+                pass
+        else:
+            pass
 
     def save_prediction(self, tosave):
         # Make predictions file is it does not exists
@@ -233,15 +252,16 @@ class FlowerbedAlternative(FlowerBedAbstract):
         json.dump(tosave, file)
         file.close()
 
-def threshold_correction(current_threshold, feedback):
+def threshold_correction(current_threshold, feedback, times):
     #if feedback = 1 -> threshold too high
     #if feedback = -1 -> threshold too low
+    #times -- how many times the correction is done
     #other correction functions can be added
     
-    if(feedback == 1):
-        new_threshold = current_threshold*1.1
-    elif(feedback == -1):
-        new_threshold = current_threshold*0.9
+    if(feedback == 'increase'):
+        new_threshold = current_threshold*1.1**times
+    elif(feedback == 'decrease'):
+        new_threshold = current_threshold*0.9**times
     else:
         new_threshold = current_threshold
 
