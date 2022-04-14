@@ -86,7 +86,7 @@ class Scheduling:
 
                 print("flowerbed" + self.predictions_files[prediction_file_indx] + " => hours till now:" + str(until_watering_from_now) + ", time of watering: " + str(time_of_watering), flush=True)
 
-                if((until_watering_from_now < 150) and (until_watering_from_now > -10)):
+                if((until_watering_from_now < 150) and (until_watering_from_now > -24)):
                     # Send to kafka (timestamp: current time (in seconds),
                     # T: time of watering, WA: water amount
 
@@ -102,8 +102,8 @@ class Scheduling:
                 else:
                     kafka_topic = self.output_topics[prediction_file_indx]
                     output_dict = {"timestamp": current_time,
-                                    "T": None,
-                                    "WA": None,
+                                    "T": -1,
+                                    "WA": -1,
                                     "predicted_profile": predicted_profile}
                     self.kafka_producer.send(kafka_topic, value=output_dict)
                     print(f'{output_dict = }')

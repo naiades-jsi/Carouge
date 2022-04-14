@@ -8,7 +8,7 @@
     "device_1efe": {
         "name" : "device_1efe",
         "topic": "features_carouge_flowerbed8",
-        "initial_threshold": 22,
+        "initial_threshold": 24,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -21,7 +21,7 @@
     "device_1eff": {
         "name" : "device_1eff",
         "topic": "features_carouge_flowerbed6",
-        "initial_threshold": 22,
+        "initial_threshold": 24,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -34,7 +34,7 @@
     "device_1f0d": {
         "name" : "device_1f0d",
         "topic": "features_carouge_flowerbed1",
-        "initial_threshold": 22,
+        "initial_threshold": 24,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -47,7 +47,7 @@
     "device_1f02": {
         "name" : "device_1f02",
         "topic": "features_carouge_flowerbed7",
-        "initial_threshold": 22,
+        "initial_threshold": 24,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -60,7 +60,7 @@
     "device_1f06": {
         "name" : "device_1f06",
         "topic": "features_carouge_flowerbed4",
-        "initial_threshold": 22,
+        "initial_threshold": 24,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -73,7 +73,7 @@
     "device_1f08": {
         "name" : "device_1f08",
         "topic": "features_carouge_flowerbed2",
-        "initial_threshold": 22,
+        "initial_threshold": 24,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
@@ -86,7 +86,7 @@
     "device_1f10": {
         "name" : "device_1f10",
         "topic": "features_carouge_flowerbed3",
-        "initial_threshold": 22,
+        "initial_threshold": 24,
         "forecast_model": "DenseNN_RealData()",
         "forecast_model_conf": {
             "loss_coefs": [1, 1],
