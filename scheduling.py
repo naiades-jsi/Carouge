@@ -63,50 +63,54 @@ class Scheduling:
         for prediction_file_indx in range(len(self.predictions_files)):
             prediction_files = self.predictions_files[prediction_file_indx]
             file_path = "./predictions/" + prediction_files
-            with open(file_path) as predictions_json:
-                last_prediction = json.load(predictions_json)
-                # If the watering happens today
-                hours_until_watering = last_prediction["T"]
-                WA = last_prediction["WA"]
-                sample_time = last_prediction["timestamp"]
-                predicted_profile = last_prediction["predicted_profile"]
+            try: 
+                with open(file_path) as predictions_json:
+                    last_prediction = json.load(predictions_json)
+                    # If the watering happens today
+                    hours_until_watering = last_prediction["T"]
+                    WA = last_prediction["WA"]
+                    sample_time = last_prediction["timestamp"]
+                    predicted_profile = last_prediction["predicted_profile"]
 
-                # If time of watering is less than 24h from now )time.time returs seconds
-                current_time = time.time()
+                    # If time of watering is less than 24h from now )time.time returs seconds
+                    current_time = time.time()
 
-                # Sample time is in miliseconds (needs to be in seconds).
-                # To this time seconds untill watering are added.
-                time_of_watering = (sample_time/1000000) + (hours_until_watering * 3600)
+                    # Sample time is in miliseconds (needs to be in seconds).
+                    # To this time seconds untill watering are added.
+                    time_of_watering = (sample_time/1000000) + (hours_until_watering * 3600)
 
-                #print(f'{time_of_watering = }')
-                #print(f'{current_time = }')
+                    #print(f'{time_of_watering = }')
+                    #print(f'{current_time = }')
 
-                # Hours untill watering from now
-                until_watering_from_now = (time_of_watering - current_time)/3600
+                    # Hours untill watering from now
+                    until_watering_from_now = (time_of_watering - current_time)/3600
 
-                print("flowerbed" + self.predictions_files[prediction_file_indx] + " => hours till now:" + str(until_watering_from_now) + ", time of watering: " + str(time_of_watering), flush=True)
+                    print("flowerbed" + self.predictions_files[prediction_file_indx] + " => hours till now:" + str(until_watering_from_now) + ", time of watering: " + str(time_of_watering), flush=True)
 
-                if((until_watering_from_now < 150) and (until_watering_from_now > -24)):
-                    # Send to kafka (timestamp: current time (in seconds),
-                    # T: time of watering, WA: water amount
+                    if((until_watering_from_now < 150) and (until_watering_from_now > -24)):
+                        # Send to kafka (timestamp: current time (in seconds),
+                        # T: time of watering, WA: water amount
 
-                    # Find the topic and post
-                    kafka_topic = self.output_topics[prediction_file_indx]
-                    print(f'{kafka_topic = }')
-                    output_dict = {"timestamp": current_time,
-                                    "T": datetime.fromtimestamp(time_of_watering).strftime("%Y-%m-%d %H:%M:%S"),
-                                    "WA": WA,
-                                    "predicted_profile": predicted_profile}
-                    self.kafka_producer.send(kafka_topic, value=output_dict)
-                    print(f'{output_dict = }')
-                else:
-                    kafka_topic = self.output_topics[prediction_file_indx]
-                    output_dict = {"timestamp": current_time,
-                                    "T": -1,
-                                    "WA": -1,
-                                    "predicted_profile": predicted_profile}
-                    self.kafka_producer.send(kafka_topic, value=output_dict)
-                    print(f'{output_dict = }')
+                        # Find the topic and post
+                        kafka_topic = self.output_topics[prediction_file_indx]
+                        print(f'{kafka_topic = }')
+                        output_dict = {"timestamp": current_time,
+                                        "T": datetime.fromtimestamp(time_of_watering).strftime("%Y-%m-%d %H:%M:%S"),
+                                        "WA": WA,
+                                        "predicted_profile": predicted_profile}
+                        self.kafka_producer.send(kafka_topic, value=output_dict)
+                        print(f'{output_dict = }')
+                    else:
+                        kafka_topic = self.output_topics[prediction_file_indx]
+                        output_dict = {"timestamp": current_time,
+                                        "T": -1,
+                                        "WA": -1,
+                                        "predicted_profile": predicted_profile}
+                        self.kafka_producer.send(kafka_topic, value=output_dict)
+                        print(f'{output_dict = }')
+            
+            except Exception as e:
+                print(e)
 
 
     def run(self) -> None:
