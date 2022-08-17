@@ -12,7 +12,7 @@ import os
 
 class FlowerBedAbstract(ABC):
 
-    def __init__(self) -> None: 
+    def __init__(self) -> None:
         pass
 
     @abstractmethod
@@ -25,7 +25,7 @@ class FlowerBedAbstract(ABC):
     def data_insert(self, value):
         #inserting measurements (weather, soil moisture ... single FV or separate?)
         pass
-        
+
     @abstractmethod
     def configure(self, conf) -> None:
         #configuring the flowerbed (might have different parameters based on location, flowerbed size, sun exposure,...)
@@ -36,7 +36,7 @@ class FlowerBedAbstract(ABC):
         pass
 
 class Flowerbed1(FlowerBedAbstract):
-    def __init__(self) -> None: 
+    def __init__(self) -> None:
         pass
 
     def configure(self, conf: dict):
@@ -45,7 +45,7 @@ class Flowerbed1(FlowerBedAbstract):
         self.threshold = conf["initial_threshold"]
 
         self.forecast_model = eval(conf["forecast_model"])
-    
+
         self.forecast_model.configure(con = conf["forecast_model_conf"])
 
         self.current_dampness = 0.0
@@ -86,9 +86,9 @@ class Flowerbed1(FlowerBedAbstract):
             hour_of_watering = (now.hour + timetowatering)%24
 
             #2. step - when we do water the plants: how much water to use
-            WA = self.forecast_model.predict_WA(current_dampness = self.current_dampness, 
+            WA = self.forecast_model.predict_WA(current_dampness = self.current_dampness,
                                             fv = value,
-                                            estimated_th = self.threshold, 
+                                            estimated_th = self.threshold,
                                             hour_of_watering = hour_of_watering)
 
             #print('WA: ' + str(WA), flush = True)
@@ -109,12 +109,12 @@ class Flowerbed1(FlowerBedAbstract):
             #print('to send: ' + str(tosend), flush = True)
 
             self.save_prediction(tosend)
-            
+
             for output in self.outputs:
                 output.send_out(value=tosend,
                                 name = self.topic_WA)
-            
-        
+
+
 
     def feedback_insert(self, value: float, timestamp):
          #correcting the internal threshold once we get the feedback (too wet, too dry)
@@ -152,7 +152,7 @@ class Flowerbed1(FlowerBedAbstract):
 class FlowerbedAlternative(FlowerBedAbstract):
     #Alternative method of forecasting
 
-    def __init__(self) -> None: 
+    def __init__(self) -> None:
         pass
 
     def configure(self, conf: dict):
@@ -197,9 +197,9 @@ class FlowerbedAlternative(FlowerBedAbstract):
         hour_of_watering = (now.hour + timetowatering)%24
 
         #2. step - when we do water the plants: how much water to use
-        WA = self.forecast_model.predict_WA(current_dampness = self.threshold, 
+        WA = self.forecast_model.predict_WA(current_dampness = self.threshold,
                                         weather_data = None,
-                                        estimated_th = self.threshold, 
+                                        estimated_th = self.threshold,
                                         hour_of_watering = hour_of_watering)
 
         # T-time to next watering
@@ -212,12 +212,12 @@ class FlowerbedAlternative(FlowerBedAbstract):
         }
 
         self.save_prediction(tosend)
-        
+
         for output in self.outputs:
             output.send_out(value=tosend,
                             name = self.topic_WA)
-        
-        
+
+
 
     def feedback_insert(self, value: float, timestamp):
         #correcting the internal threshold once we get the feedback (too wet, too dry)
@@ -248,7 +248,7 @@ class FlowerbedAlternative(FlowerBedAbstract):
 
 
         filename = dir + "/" + self.name + "_prediction.json"
-        file = open(filename, "w")
+        file = open(filename, "w+")
         json.dump(tosave, file)
         file.close()
 
@@ -257,7 +257,7 @@ def threshold_correction(current_threshold, feedback, times):
     #if feedback = -1 -> threshold too low
     #times -- how many times the correction is done
     #other correction functions can be added
-    
+
     if(feedback == 'increase'):
         new_threshold = current_threshold*1.1**times
     elif(feedback == 'decrease'):
