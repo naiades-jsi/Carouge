@@ -7,6 +7,8 @@ from json import dumps
 import os
 import logging
 
+LOGGER = logging.getLogger(__name__)
+
 class OutputAbstract(ABC):
 
     def __init__(self) -> None:
@@ -31,7 +33,7 @@ class KafkaOutput(OutputAbstract):
     def configure(self, conf: Dict[Any, Any]) -> None:
         super().configure(conf=conf)
         self.producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
-                         value_serializer=lambda x: 
+                         value_serializer=lambda x:
                          dumps(x).encode('utf-8'))
 
     def send_out(self, value: Any = None, name: Any = None, timestamp: Any = 0) -> None:
@@ -52,7 +54,7 @@ class TerminalOutput(OutputAbstract):
 
     def send_out(self,  value: Any = None, name: Any = None, timestamp: Any = 0) -> None:
         # Send to kafka only if an anomaly is detected (or if it is specified
-        # that ok values are to be sent)    
+        # that ok values are to be sent)
         o = str(timestamp) + ": (value: " + str(value) + ")"
-        print(o)
+        LOGGER.info(o)
 

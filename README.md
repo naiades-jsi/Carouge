@@ -1,4 +1,4 @@
-# Carouge - watering predictions
+# Carouge - predictions for watering of flowerbeds
 
 The component is communicating via Kafka topics.
 
@@ -91,7 +91,7 @@ For debugging reasons several scripts are available in the repository. Kafka mes
 For pushing current predictions, `upload_predictions.py` script can be used.
 
 
-# Explaination
+# Technical details
 
 1. The Carouge component runs 2 simultaneous threads:
   - Predictions -> in this thread, the predictions are done as new feature vectors are uploaded to the input kafka topic. The predictions are stored in temporary files. (example configurations: configuration/main/)

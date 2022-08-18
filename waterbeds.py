@@ -67,9 +67,10 @@ class Flowerbed1(FlowerBedAbstract):
 
 
         if(np.isnan([float(i) for i in value]).any()):
-            LOGGER.info('NaN in message')
+            LOGGER.info('%s: NaN in message', self.name)
             pass
         elif(len(value)!=7):
+            LOGGER.info('%s: Too short message', self.name)
             pass
         else:
 

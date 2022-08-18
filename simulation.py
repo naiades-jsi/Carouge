@@ -21,7 +21,7 @@ producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
 consumer = KafkaConsumer(bootstrap_servers=["localhost:9092"],
                         auto_offset_reset="latest",
                         enable_auto_commit="True",
-                        group_id="my-group",
+                        group_id="carouge-simulation-group",
                         value_deserializer=lambda x: loads(x.decode('utf-8')))
 
 consumer.subscribe(["carouge_test"])
