@@ -6,6 +6,9 @@ import time
 from typing import Any, List
 from kafka import KafkaProducer
 from datetime import datetime
+import logging
+
+LOGGER = logging.getLogger(__name__)
 
 def run_time_predictions(scheduling):
     scheduling.time_predictions()
@@ -39,13 +42,13 @@ class Scheduling:
 
         #Schedule prediction every minute (for testing)
         #schedule.every(1).minute.do(self.time_predictions)
-        print('Sceduling config complete: ' + str(time.time()), flush=True)
+        LOGGER.info('Scheduling config complete: %s',  str(time.time()))
 
 
 
     def time_predictions(self) -> None:
 
-        print("Time predictions: " + str(time.time()), flush=True)
+        LOGGER.info("Checking time predictions: %s", str(time.time()))
         # Reads predicted times and schedules prediction reads for water
         # amount and sends time predictions to kafka.
 
@@ -53,9 +56,9 @@ class Scheduling:
         #TODO: rewrite files after watering?
         #self.forecast_model = eval(conf["forecast_model"])
         #self.forecast_model.configure(con = conf["forecast_model_conf"])
-        #forecast_model.predict_WA(current_dampness = self.threshold[0], 
+        #forecast_model.predict_WA(current_dampness = self.threshold[0],
         #                                weather_data = None,
-        #                                estimated_th = self.threshold, 
+        #                                estimated_th = self.threshold,
         #                                hour_of_watering = hour_of_watering)
 
 
@@ -63,7 +66,7 @@ class Scheduling:
         for prediction_file_indx in range(len(self.predictions_files)):
             prediction_files = self.predictions_files[prediction_file_indx]
             file_path = "./predictions/" + prediction_files
-            try: 
+            try:
                 with open(file_path) as predictions_json:
                     last_prediction = json.load(predictions_json)
                     # If the watering happens today
@@ -85,7 +88,7 @@ class Scheduling:
                     # Hours untill watering from now
                     until_watering_from_now = (time_of_watering - current_time)/3600
 
-                    print("flowerbed" + self.predictions_files[prediction_file_indx] + " => hours till now:" + str(until_watering_from_now) + ", time of watering: " + str(time_of_watering), flush=True)
+                    LOGGER.info("flowerbed" + self.predictions_files[prediction_file_indx] + " => hours till now:" + str(until_watering_from_now) + ", time of watering: " + str(time_of_watering))
 
                     if((until_watering_from_now < 150) and (until_watering_from_now > -24)):
                         # Send to kafka (timestamp: current time (in seconds),
@@ -93,13 +96,13 @@ class Scheduling:
 
                         # Find the topic and post
                         kafka_topic = self.output_topics[prediction_file_indx]
-                        print(f'{kafka_topic = }')
+                        LOGGER.info("Sending to topic: %s", kafka_topic)
                         output_dict = {"timestamp": current_time,
                                         "T": datetime.fromtimestamp(time_of_watering).strftime("%Y-%m-%d %H:%M:%S"),
                                         "WA": WA,
                                         "predicted_profile": predicted_profile}
                         self.kafka_producer.send(kafka_topic, value=output_dict)
-                        print(f'{output_dict = }')
+                        LOGGER.info("Data: {0}".format(output_dict))
                     else:
                         kafka_topic = self.output_topics[prediction_file_indx]
                         output_dict = {"timestamp": current_time,
@@ -107,10 +110,10 @@ class Scheduling:
                                         "WA": -1,
                                         "predicted_profile": predicted_profile}
                         self.kafka_producer.send(kafka_topic, value=output_dict)
-                        print(f'{output_dict = }')
-            
+                        LOGGER.info("Data: {0}".format(output_dict))
+
             except Exception as e:
-                print(e)
+                LOGGER.exception(e)
 
 
     def run(self) -> None:

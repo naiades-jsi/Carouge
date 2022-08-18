@@ -2,7 +2,7 @@
     "bootstrap_servers": ["localhost:9092"],
     "auto_offset_reset": "latest",
     "enable_auto_commit": "True",
-    "group_id": "my-group",
+    "group_id": "carouge-group",
     "value_deserializer": "lambda x: loads(x.decode('utf-8'))",
     "flowerbeds":["device_1efe", "device_1eff", "device_1f0d", "device_1f02", "device_1f06", "device_1f08", "device_1f10"],
     "device_1efe": {

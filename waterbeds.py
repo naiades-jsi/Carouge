@@ -9,6 +9,9 @@ import numpy as np
 import pandas as pd
 import json
 import os
+import logging
+
+LOGGER = logging.getLogger(__name__)
 
 class FlowerBedAbstract(ABC):
 
@@ -52,7 +55,7 @@ class Flowerbed1(FlowerBedAbstract):
         self.last_feedback = 0
 
 
-        #TODO: fix this!!
+        # TODO: fix this!!
         self.topic_data = conf["name"] + "_data"
         #self.topic_WA = conf["name"] + "_WA"
         pass
@@ -64,7 +67,7 @@ class Flowerbed1(FlowerBedAbstract):
 
 
         if(np.isnan([float(i) for i in value]).any()):
-            print('NaN in message')
+            LOGGER.info('NaN in message')
             pass
         elif(len(value)!=7):
             pass
@@ -77,7 +80,7 @@ class Flowerbed1(FlowerBedAbstract):
 
             #print("Data inserted: " + str(value))
 
-            #1. step - how long untill the current dampness falls under the threshold
+            # 1. STEP - how long until the current dampness falls under the threshold
             timetowatering, predicted_profile = self.forecast_model.predict_time(current_dampness = self.current_dampness,fv = value, estimated_th = self.threshold)
 
             #print('timetowatering: ' + str(timetowatering), flush = True)
@@ -85,7 +88,7 @@ class Flowerbed1(FlowerBedAbstract):
             now = datetime.now()
             hour_of_watering = (now.hour + timetowatering)%24
 
-            #2. step - when we do water the plants: how much water to use
+            # 2. STEP - when we do water the plants: how much water to use
             WA = self.forecast_model.predict_WA(current_dampness = self.current_dampness,
                                             fv = value,
                                             estimated_th = self.threshold,

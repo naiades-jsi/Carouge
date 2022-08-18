@@ -18,6 +18,10 @@ from forecasting import DenseNN
 from scheduling import Scheduling
 from multiprocessing import Process
 
+LOGGER = logging.getLogger(__name__)
+logging.basicConfig(
+    format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", level=logging.INFO)
+
 def start_consumer(config):
     #this will be changed to a component which communicates with the API
     consumer = ConsumerKafka(configuration_location=config)
@@ -91,14 +95,14 @@ def main():
                                args=(str(args.config_consumer),))
     schedule_process = Process(target=start_scheduler,
                                args=(str(args.config_schedule),))
-    
+
     # Start paralell processes
     consumer_process.start()
     schedule_process.start()
 
     if(args.watchdog):
         ping_watchdog(consumer_process, schedule_process)
-    
+
 
 
 if (__name__ == '__main__'):
