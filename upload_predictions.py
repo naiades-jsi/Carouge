@@ -8,15 +8,19 @@ import threading
 import time
 import logging
 
-from consumer import ConsumerKafka
+#from consumer import ConsumerKafka
 
 from datetime import datetime
-from output import KafkaOutput
-from waterbeds import Flowerbed1
-from consumer import ConsumerKafka
-from forecasting import DenseNN
+#from output import KafkaOutput
+#from waterbeds import Flowerbed1
+#from consumer import ConsumerKafka
+#from forecasting import DenseNN
 from scheduling import Scheduling
-from multiprocessing import Process
+#from multiprocessing import Process
+
+LOGGER = logging.getLogger(__name__)
+logging.basicConfig(
+    format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", level=logging.INFO)
 
 def start_consumer(config):
     #this will be changed to a component which communicates with the API
