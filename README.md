@@ -1,5 +1,7 @@
 # Carouge - watering predictions
 
+The component is communicating via Kafka topics.
+
 Input topics (with feature vectors):
 
 * `features_carouge_flowerbed8`
@@ -22,6 +24,57 @@ Output topics:
 * `device_1efd_pred_output` | ???
 * `device_1f09_pred_output` | ???
 
+# Running the component
+
+The component is run with:
+
+```python3 main.py -cc config_real_data.json -cs schedule_real_data.json```
+
+The configuration files are being stored in `/configuration/main/` (for consumer config) and `/configuration/schedule/` (for schedule config).
+
+Consumer config includes Kafka connection parameters as well as device configurations. The config looks like this:
+
+```json
+{
+    "bootstrap_servers": ["localhost:9092"],
+    "auto_offset_reset": "latest",
+    "enable_auto_commit": "True",
+    "group_id": "carouge-group",
+    "value_deserializer": "lambda x: loads(x.decode('utf-8'))",
+    "flowerbeds":["device_1efe", ...],
+    "device_1efe": {
+        "name" : "device_1efe",
+        "topic": "features_carouge_flowerbed8",
+        "initial_threshold": 24,
+        "forecast_model": "DenseNN_RealData()",
+        "forecast_model_conf": {
+            "loss_coefs": [1, 1],
+            "rise_time":2,
+            "train_data": "flowerbed8_160h_new.npy"
+        },
+        "output": [],
+        "output_conf": [{}]
+    },
+    ...
+}
+```
+
+Scheduler config includes data on the hour when predictions are made, files, where predictions are stored and Kafka output topics.
+
+```json
+{
+    "hour_of_time_predictions": "06:00",
+    "predictions_files": [
+        "device_1efd_prediction.json",
+        ...
+    ],
+    "output_topics": [
+        "device_1efd_pred_output",
+        ...
+    ],
+    "bootstrap_server": ["localhost:9092"]
+}
+```
 
 # Deploying and building
 
