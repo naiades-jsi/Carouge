@@ -1,4 +1,27 @@
-# Carouge
+# Carouge - watering predictions
+
+Input topics (with feature vectors):
+
+* `features_carouge_flowerbed8`
+* `features_carouge_flowerbed6`
+* `features_carouge_flowerbed1`
+* `features_carouge_flowerbed7`
+* `features_carouge_flowerbed4`
+* `features_carouge_flowerbed2`
+* `features_carouge_flowerbed3`
+
+Output topics:
+
+* `device_1f0d_pred_output` | FlowerBed1
+* `device_1f08_pred_output` | FlowerBed2
+* `device_1f10_pred_output` | FlowerBed3
+* `device_1f06_pred_output` | FlowerBed4
+* `device_1eff_pred_output` | FlowerBed6
+* `device_1f02_pred_output` | FlowerBed7
+* `device_1efe_pred_output` | FlowerBed8
+* `device_1efd_pred_output` | ???
+* `device_1f09_pred_output` | ???
+
 
 # Deploying and building
 
