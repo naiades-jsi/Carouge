@@ -39,6 +39,7 @@ class KafkaOutput(OutputAbstract):
     def send_out(self, value: Any = None, name: Any = None, timestamp: Any = 0) -> None:
             kafka_topic = name
             self.producer.send(kafka_topic, value=value)
+            LOGGER.info("Sending output to Kafka: %s", kafka_topic)
 
 class TerminalOutput(OutputAbstract):
 

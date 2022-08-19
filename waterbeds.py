@@ -64,7 +64,7 @@ class Flowerbed1(FlowerBedAbstract):
         # the value here is the dampness from the sensor
         # once per day at 6AM
         # the output is time and ammount of watering
-
+        LOGGER.info("Starting prediction for %s", self.name)
 
         if(np.isnan([float(i) for i in value]).any()):
             LOGGER.info('%s: NaN in message', self.name)
@@ -112,6 +112,7 @@ class Flowerbed1(FlowerBedAbstract):
 
             #print('to send: ' + str(tosend), flush = True)
 
+            LOGGER.info("Saving pradiction to %s", self.name)
             self.save_prediction(tosend)
 
             for output in self.outputs:

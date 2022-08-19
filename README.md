@@ -80,7 +80,7 @@ Scheduler config includes data on the hour when predictions are made, files, whe
 
 The component is deployed via Docker Hub at `e3ailab/carouge_ircai`.
 
-The image is built with `docker build -t e3ailab/carouge_ircai`.
+The image is built with `docker build -t e3ailab/carouge_ircai .`.
 
 The component must be pushed to the Docker Hub via `docker push` command. Before deploying in the production the component needs to be pulled from repository with: `docker pull e3ailab/carouge_ircai`. Finally, the component is run with `docker run -d --network=host e3ailab/carouge_ircai`.
 

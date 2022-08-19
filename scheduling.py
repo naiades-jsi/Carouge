@@ -104,6 +104,7 @@ class Scheduling:
                         self.kafka_producer.send(kafka_topic, value=output_dict)
                         LOGGER.info("Data: {0}".format(output_dict))
                     else:
+                        LOGGER.info("Sending 'no-watering' data due to wrong until_watering_from_now: %d", until_watering_from_now)
                         kafka_topic = self.output_topics[prediction_file_indx]
                         output_dict = {"timestamp": current_time,
                                         "T": -1,
