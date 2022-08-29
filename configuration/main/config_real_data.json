@@ -95,5 +95,18 @@
         },
         "output": [],
         "output_conf": [{}]
+    },
+    "device_1efd": {
+        "name" : "device_1efd",
+        "topic": "features_carouge_flowerbed5",
+        "initial_threshold": 24,
+        "forecast_model": "DenseNN_RealData()",
+        "forecast_model_conf": {
+            "loss_coefs": [1, 1],
+            "rise_time":2,
+            "train_data": "flowerbed5_160h_new.npy"
+        },
+        "output": [],
+        "output_conf": [{}]
     }
 }
