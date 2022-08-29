@@ -163,7 +163,7 @@ class DenseNN_RealData(ForecastAbstract):
 
         batch_size = 50
         self.model.fit(x_train,y_train, epochs =500, batch_size = batch_size, validation_data = None, verbose = 0)
-        LOGGER.info("Stopped training: %s", self.train_data)
+        LOGGER.info("Finished training: %s", self.train_data)
         pass
 
 
