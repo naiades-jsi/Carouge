@@ -6,9 +6,15 @@ import pandas as pd
 import tensorflow as tf
 from tensorflow import keras
 from typing import Any, Dict, List
-from abc import abstractmethod, ABC   
-import json  
+from abc import abstractmethod, ABC
+import json
 from datetime import datetime
+import logging
+
+# fixing logger
+LOGGER = logging.getLogger(__name__)
+logging.basicConfig(
+    format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", level=logging.INFO)
 
 class ForecastAbstract(ABC):
 
@@ -26,18 +32,19 @@ class ForecastAbstract(ABC):
 
     @abstractmethod
     def predict_time(self, input_values: list) -> None:
-       pass 
+       pass
 
     @abstractmethod
     def predict_WA(self, input_values: list) -> None:
         pass
 
 class DenseNN(ForecastAbstract):
+    """This class is not used!"""
     def __init__(self, configuration_location: str = None) -> None:
         self.configuration_location = configuration_location
- 
+
     def configure(self, con: Dict[Any, Any], configuration_location: str = None) -> None:
-        
+
         self.loss_coefs = con["loss_coefs"]
         self.rise_time = con["rise_time"]
         print(self.rise_time)
@@ -56,7 +63,7 @@ class DenseNN(ForecastAbstract):
             T = 1
             x_train.append([WA, current, T])
             y_train.append(self.SimulateSteps(WA, current, T))
-            
+
         x_train = np.array(x_train)
         y_train = np.array(y_train)
 
@@ -81,14 +88,14 @@ class DenseNN(ForecastAbstract):
         for i in range(300):
             s -= 0.003*s + 0.03*s*(np.random.rand()-0.5)
             S = np.concatenate([S, [s]])
-        
-        return (S)  
+
+        return (S)
 
     def predict_time(self, current_dampness: float, weather_data: list, estimated_th: float = 0) -> None:
 
         T = 1
         Ts = []
-        
+
         #get the full curve which descends from 100% to 0%
         y_pred = 30*self.model.predict(np.atleast_2d([100, 0, T]))[0]
 
@@ -119,7 +126,7 @@ class DenseNN(ForecastAbstract):
             Times.append(t)
             Losses.append(Loss(i, t))
 
-        #choose the minimal loss        
+        #choose the minimal loss
         idx = np.argmin(Losses)
         WA = WAs[idx]
         time = Times[idx]
@@ -129,7 +136,7 @@ class DenseNN(ForecastAbstract):
 class DenseNN_RealData(ForecastAbstract):
     def __init__(self, configuration_location: str = None) -> None:
         self.configuration_location = configuration_location
- 
+
     def configure(self, con: Dict[Any, Any], configuration_location: str = None) -> None:
         self.loss_coefs = con["loss_coefs"]
         self.train_data = "training_data/" + con["train_data"]
@@ -139,6 +146,7 @@ class DenseNN_RealData(ForecastAbstract):
         pass
 
     def train(self) -> None:
+        LOGGER.info("Start training: %s", self.train_data)
         x_train, y_train = np.load(self.train_data, allow_pickle = True)
 
         horizon = 80
@@ -155,8 +163,9 @@ class DenseNN_RealData(ForecastAbstract):
 
         batch_size = 50
         self.model.fit(x_train,y_train, epochs =500, batch_size = batch_size, validation_data = None, verbose = 0)
+        LOGGER.info("Stopped training: %s", self.train_data)
         pass
-  
+
 
     def predict_time(self, current_dampness, fv, estimated_th: float = 0):
 
@@ -164,7 +173,7 @@ class DenseNN_RealData(ForecastAbstract):
 
         y_pred = 30*self.model.predict(np.atleast_2d(np.array(fv)/30))[0]
 
-        
+
 
         y_pred = np.add(y_pred, (current_dampness - y_pred[0]))
 
@@ -178,7 +187,7 @@ class DenseNN_RealData(ForecastAbstract):
     def predict_WA(self, current_dampness: float, fv, estimated_th: float = 0, hour_of_watering: int = 0):
 
         ratio = 0.093
-        
+
         #Loss function to minimize
         Loss = lambda WA, time: self.loss_coefs[0]*WA/ratio - self.loss_coefs[1]*time
 
@@ -188,7 +197,7 @@ class DenseNN_RealData(ForecastAbstract):
 
         now = datetime.now()
         current_hour = now.hour
-        
+
 
         #Get the loss for all possible starting moistures
         fv_copy = fv.copy()
@@ -196,14 +205,14 @@ class DenseNN_RealData(ForecastAbstract):
             fv_copy[0] = current_dampness + i
             fv_copy[1] = current_dampness + i
             y_pred = 30*self.model.predict(np.atleast_2d(np.array(fv_copy)/30))[0]
-            
+
             y_pred = np.add(y_pred, current_dampness + i - y_pred[0])
 
             t = len(y_pred[y_pred>=estimated_th])*2       #2-hour intervals
             Times.append(t)
             Losses.append(Loss(i, t))
 
-        #choose the minimal loss        
+        #choose the minimal loss
         idx = np.argmin(Losses)
         WA = WAs[idx]/ratio
         if(WA < 0):
